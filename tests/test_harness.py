@@ -328,6 +328,22 @@ class AnnotateEndToEndTests(unittest.TestCase):
             server.server_close()
 
 
+class DryRunTests(unittest.TestCase):
+    def test_dry_run_renders_complete_prompt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            row = {"paper_id": "DEMO-2024-01", "fulltext": str(FIXTURE)}
+            res = annotate_one(row, Path(tmp), None, load_moves(), max_chars=60000, allow_truncate=False,
+                               force=False, dry_run=True)
+            self.assertEqual(res["status"], "rendered")
+            prompt = (Path(tmp) / "_prompts" / "DEMO-2024-01.md").read_text(encoding="utf-8")
+            self.assertNotIn("{{", prompt)
+            self.assertIn("[P19]", prompt)
+            self.assertIn("`MECH-TENSION`", prompt)
+            self.assertIn("DEMO-2024-01", prompt)
+            self.assertFalse(prompt.lstrip().startswith("<!--"))
+            self.assertEqual(sum(1 for m in load_moves()["moves"] if f"`{m['code']}`" in prompt), 68)
+
+
 class BlindTests(unittest.TestCase):
     def test_pack_and_score_roundtrip(self):
         with tempfile.TemporaryDirectory() as tmp:
