@@ -1,0 +1,147 @@
+{
+  "paper_id": "DEMO-2024-01",
+  "codebook_version": "0.2.0",
+  "paper_type": "mechanism",
+  "fields": {
+    "empirical_phenomenon": {
+      "status": "present",
+      "value": "材料精简后纸质材料减少，但线上填报与截图留痕同步增加，工作时长没有下降",
+      "evidence": [{"quote": "纸质材料确实减少了约一半，但线上填报事项和截图留痕数量同步上升", "loc": "P6"}]
+    },
+    "default_expectation": {
+      "status": "present",
+      "value": "材料数量下降应当直接减轻基层负担",
+      "evidence": [{"quote": "按照改革设计，材料数量下降应当直接减轻基层负担", "loc": "P6"}]
+    },
+    "puzzle": {
+      "status": "present",
+      "value": "以减负为目标的精简没有带来负担下降",
+      "evidence": [{"quote": "为什么以减负为目标的材料精简，没有带来负担下降？", "loc": "P7"}]
+    },
+    "research_question": {
+      "status": "present",
+      "value": "为什么材料精简没有带来减负",
+      "evidence": [{"quote": "为什么以减负为目标的材料精简，没有带来负担下降", "loc": "P7"}]
+    },
+    "theoretical_target": {
+      "status": "present",
+      "value": "打开「压力—负担」之间的机制：基层在双重要求下的策略替代",
+      "evidence": [{"quote": "本文提出“双重要求—策略替代”框架", "loc": "P12"}]
+    },
+    "literature_families": {
+      "status": "present",
+      "value": ["压力传导解释", "能力不足解释", "技术赋能解释"],
+      "evidence": [
+        {"quote": "第一类是压力传导解释", "loc": "P9"},
+        {"quote": "第二类是能力不足解释", "loc": "P9"},
+        {"quote": "第三类是技术赋能解释", "loc": "P9"}
+      ]
+    },
+    "precise_gap": {
+      "status": "present",
+      "value": "压力解释说明不了指标减少后负担仍在；技术解释默认线上化必然减负",
+      "evidence": [
+        {"quote": "压力传导解释难以说明为何在考核指标减少之后负担依然存在", "loc": "P10"},
+        {"quote": "技术赋能解释则默认线上化必然减负", "loc": "P10"}
+      ]
+    },
+    "core_concepts": {
+      "status": "present",
+      "value": ["双重要求：减少材料数量 × 过程可被核查", "策略替代：以线上留痕同时满足两项要求"],
+      "evidence": [{"quote": "改革同时施加了两项要求：一是减少材料数量，二是保证工作过程可被核查", "loc": "P12"}]
+    },
+    "concept_neighbors": {"status": "absent"},
+    "actors": {
+      "status": "present",
+      "value": ["街道干部", "区级检查组"],
+      "evidence": [
+        {"quote": "街道干部通过把纸质材料转为线上填报与截图", "loc": "P12"},
+        {"quote": "检查组看的是平台上的记录", "loc": "P16"}
+      ]
+    },
+    "institutional_conditions": {
+      "status": "present",
+      "value": ["材料数量纳入考核", "平台留痕作为验收依据"],
+      "evidence": [
+        {"quote": "并将“材料数量”纳入考核", "loc": "P5"},
+        {"quote": "平台留痕完整度被列为验收的重要依据", "loc": "P16"}
+      ]
+    },
+    "mechanism_chain": {
+      "status": "present",
+      "value": ["两项要求同时施加", "纸质条件下相互冲突", "线上化同时满足两项要求", "检查验收认可", "成为默认做法，负担以新形式稳定"],
+      "evidence": [
+        {"quote": "两项要求在纸质条件下相互冲突", "loc": "P12"},
+        {"quote": "就会成为下一轮工作的默认做法", "loc": "P13"}
+      ]
+    },
+    "rival_explanations": {
+      "status": "present",
+      "value": ["压力传导", "能力不足", "技术赋能", "执行不到位"],
+      "evidence": [
+        {"quote": "压力传导解释难以说明为何在考核指标减少之后负担依然存在", "loc": "P10"},
+        {"quote": "并非因为执行不到位", "loc": "P19"}
+      ]
+    },
+    "evidence_design": {
+      "status": "present",
+      "value": "单区三个街道 2021—2023 年的台账、检查通报与 27 人访谈；以同区另一项不核查过程的改革作对照",
+      "evidence": [{"quote": "本文材料来自K区三个街道2021—2023年的工作台账、检查通报与对27名街道干部的访谈", "loc": "P15"}]
+    },
+    "evidence_to_mechanism_map": {
+      "status": "present",
+      "value": ["访谈 → 线上化策略", "检查通报 → 验收认可（稳定化）", "对照改革 → 过程核查是必要条件"],
+      "evidence": [
+        {"quote": "区级检查通报也显示，平台留痕完整度被列为验收的重要依据", "loc": "P16"},
+        {"quote": "同区另一项只考核材料数量、不核查过程的改革中，线上留痕没有明显增加", "loc": "P17"}
+      ]
+    },
+    "main_findings": {
+      "status": "present",
+      "value": ["减负失败源于两项相互牵制的要求，基层以线上留痕实现策略替代"],
+      "evidence": [{"quote": "基层以线上留痕实现了策略替代", "loc": "P19"}]
+    },
+    "theoretical_move": {
+      "status": "present",
+      "value": "把基层负担从「压力的直接结果」改写为「双重要求下策略替代的稳定化」",
+      "evidence": [{"quote": "而是因为改革同时强化了两项相互牵制的要求", "loc": "P19"}]
+    },
+    "boundary_conditions": {
+      "status": "present",
+      "value": ["只适用于数量控制与过程问责并存的情境", "仅基于一个区的材料"],
+      "evidence": [
+        {"quote": "该框架适用于同时存在数量控制与过程问责的改革情境", "loc": "P13"},
+        {"quote": "本文结论仅基于一个区的材料", "loc": "P19"}
+      ]
+    },
+    "normative_implication": {
+      "status": "present",
+      "value": "减负改革要同时审视数量控制与过程问责的组合",
+      "evidence": [{"quote": "减负改革需要同时审视数量控制与过程问责的组合", "loc": "P19"}]
+    },
+    "intro_structure": {
+      "status": "present",
+      "value": ["背景", "预期与反常", "问题"],
+      "evidence": [
+        {"quote": "减轻基层负担成为地方政府改革的重要议题", "loc": "P5"},
+        {"quote": "为什么以减负为目标的材料精简，没有带来负担下降", "loc": "P7"}
+      ]
+    }
+  },
+  "moves": [
+    {"code": "PZ-ANOMALY", "evidence": [{"quote": "按照改革设计，材料数量下降应当直接减轻基层负担。然而", "loc": "P6"}]},
+    {"code": "PZ-PERSISTENCE", "evidence": [{"quote": "负担因此以新的形式被稳定下来", "loc": "P13"}]},
+    {"code": "GAP-PROCESS", "evidence": [{"quote": "既有研究把“压力”直接连到“负担”，缺少对基层应对策略的分析", "loc": "P10"}]},
+    {"code": "GAP-CONDITION", "evidence": [{"quote": "技术赋能解释则默认线上化必然减负", "loc": "P10"}]},
+    {"code": "MECH-TENSION", "evidence": [{"quote": "两项要求在纸质条件下相互冲突", "loc": "P12"}]},
+    {"code": "MECH-INFO", "evidence": [{"quote": "忽略了平台同时提高了上级对过程的可见性", "loc": "P10"}]},
+    {"code": "MECH-STABILIZE", "evidence": [{"quote": "就会成为下一轮工作的默认做法", "loc": "P13"}]},
+    {"code": "EVI-FIELDWORK", "evidence": [{"quote": "对27名街道干部的访谈", "loc": "P15"}]},
+    {"code": "EVI-DOCUMENT", "evidence": [{"quote": "工作台账、检查通报", "loc": "P15"}]},
+    {"code": "EVI-COMPARATIVE", "evidence": [{"quote": "与之对照，同区另一项只考核材料数量、不核查过程的改革中", "loc": "P17"}]},
+    {"code": "CTR-MECHANISM", "evidence": [{"quote": "基层以线上留痕实现了策略替代", "loc": "P19"}]},
+    {"code": "CTR-BOUNDARY", "evidence": [{"quote": "该框架适用于同时存在数量控制与过程问责的改革情境", "loc": "P13"}]},
+    {"code": "CTR-POLICY-COND", "evidence": [{"quote": "减负改革需要同时审视数量控制与过程问责的组合", "loc": "P19"}]}
+  ],
+  "annotator_notes": "虚构教学示例，对应 tests/fixtures/fictional_paper.txt；用于演示格式与逐字引文要求，也被单元测试用来验证核验闸门。"
+}
