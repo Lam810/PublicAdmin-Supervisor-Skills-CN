@@ -7,6 +7,7 @@ license: CC-BY-NC-SA-4.0
 # 概念与机制构造
 
 按任务读取 [概念与机制检查卡](references/concept-mechanism.md)。只做需要的分支。
+引用概念构造或机制研究的方法文献时，从 [已核验方法文献](references/method-sources.md) 取出处。
 
 ## 概念分支
 

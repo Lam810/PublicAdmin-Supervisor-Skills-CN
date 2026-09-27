@@ -50,6 +50,9 @@ SHARED: dict[str, list[str]] = {
     "pa-argument-architect/references/nested-argument.md": [
         "pa-paper-architect/references/nested-argument.md",
     ],
+    "pa-research-design/references/method-sources.md": [
+        "pa-concept-mechanism-builder/references/method-sources.md",
+    ],
 }
 
 
