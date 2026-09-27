@@ -1,0 +1,43 @@
+# PublicAdmin-Supervisor-Skills-CN
+
+> Seventeen Agent Skills for writing Chinese-language public-administration papers, from topic and research question through literature, concepts, mechanisms, research design, paper structure, writing, review, journal fit and revision. The research judgements come from lenses abstracted from the published work of leading Chinese public-administration scholars; every rule is registered with sources and only validated rules are loaded by the skills.
+
+Target audience: graduate students and researchers writing for Chinese public-administration and political-science journals. Skills write in Chinese by default.
+
+## Install
+
+Paste the following prompt into your AI assistant:
+
+```
+Help me install every skill under the skills/ directory of https://github.com/Lam810/PublicAdmin-Supervisor-Skills-CN. Treat each directory containing SKILL.md as a separate skill; do not install the repository root as one skill.
+```
+
+Manual install: `bash scripts/install.sh --target claude` or `bash scripts/install.sh --dir <skills directory>`.
+
+## Skills (v0.3)
+
+- [pa-router](skills/pa-router/SKILL.md): identifies the contribution type and current bottleneck and recommends the next step.
+- [pa-question-framer](skills/pa-question-framer/SKILL.md): turns a topic into a puzzle-driven research question with rival explanations.
+- [pa-literature-mapper](skills/pa-literature-mapper/SKILL.md): explanation maps, precise gaps, two-step citation verification.
+- [pa-concept-mechanism-builder](skills/pa-concept-mechanism-builder/SKILL.md): concept boundaries and observable mechanisms.
+- [pa-theory-localizer](skills/pa-theory-localizer/SKILL.md): which theoretical premise, mechanism or scope the institutional context changes.
+- [pa-research-design](skills/pa-research-design/SKILL.md): case selection, process tracing, identification, mixed methods.
+- [pa-paper-architect](skills/pa-paper-architect/SKILL.md): genre-specific paper structure with reasons for each section.
+- [pa-argument-architect](skills/pa-argument-architect/SKILL.md): causal and argumentative chains checked on four nested levels.
+- [pa-intro-drafter](skills/pa-intro-drafter/SKILL.md): introductions built on the argument chain.
+- [pa-section-writer](skills/pa-section-writer/SKILL.md): evidence-grounded body sections.
+- [pa-title-abstract](skills/pa-title-abstract/SKILL.md): titles, abstracts and keywords faithful to the paper.
+- [pa-prose-polisher](skills/pa-prose-polisher/SKILL.md): meaning-preserving polishing of academic Chinese.
+- [pa-paper-reviewer](skills/pa-paper-reviewer/SKILL.md): pre-submission structural review with defect codes.
+- [pa-supervisor-panel](skills/pa-supervisor-panel/SKILL.md): seven-lens diagnosis merged into one revision plan.
+- [pa-journal-fit](skills/pa-journal-fit/SKILL.md): journal fit from official scope, guidelines and recent articles.
+- [pa-revision-responder](skills/pa-revision-responder/SKILL.md): traceable revisions and point-by-point responses.
+- [pa-scholar-distiller](skills/pa-scholar-distiller/SKILL.md): distilling research moves from papers or supervisor comments.
+
+## Documentation
+
+- [README.md](README.md) (Chinese) / [README.en.md](README.en.md): overview, lenses and sources.
+- [skills/README.md](skills/README.md) / [skills/README.en.md](skills/README.en.md): reader's guide to the skills.
+- [handbook/](handbook/): paper logic, distillation protocol, writing architecture (Chinese).
+- [rules/registry.yaml](rules/registry.yaml): rule registry; [distill/README.md](distill/README.md): pipeline; [eval/prereg.md](eval/prereg.md): pre-registered evaluation.
+- [CONTRIBUTING.md](CONTRIBUTING.md), [CHANGELOG.md](CHANGELOG.md), [LICENSE-NOTE.md](LICENSE-NOTE.md) (content CC BY-NC-SA 4.0, code MIT).

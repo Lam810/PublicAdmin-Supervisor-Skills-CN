@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480" role="img" aria-label="PublicAdmin Supervisor Skills">
+  <rect x="24" y="24" width="432" height="432" rx="88" fill="#1f4e5f"/>
+  <rect x="52" y="52" width="376" height="376" rx="64" fill="none" stroke="#f2e6c9" stroke-width="6" opacity="0.55"/>
+  <g fill="none" stroke="#f2e6c9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M240 118 L148 168 L332 168 Z"/>
+    <path d="M166 186 V270 M214 186 V270 M266 186 V270 M314 186 V270"/>
+    <path d="M140 292 H340"/>
+  </g>
+  <text x="240" y="366" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="700" fill="#f2e6c9" letter-spacing="6">PA</text>
+  <text x="240" y="404" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#f2e6c9" letter-spacing="3" opacity="0.85">SUPERVISOR SKILLS</text>
+</svg>
