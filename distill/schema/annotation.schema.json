@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Lam810/PublicAdmin-Supervisor-Skills-CN/distill/schema/annotation.schema.json",
+  "title": "PA paper research-move annotation (codebook 0.2.x)",
+  "description": "One annotation per paper. Every field marked present and every move must carry verbatim evidence quotes with a paragraph locator such as P12 or P12-P13.",
+  "type": "object",
+  "required": ["paper_id", "codebook_version", "paper_type", "fields", "moves"],
+  "additionalProperties": false,
+  "properties": {
+    "paper_id": {"type": "string", "minLength": 1},
+    "codebook_version": {"type": "string", "pattern": "^0\\.2\\."},
+    "paper_type": {
+      "enum": ["mechanism", "concept", "policy-process", "reform", "applicability", "normative", "review", "mixed"]
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "empirical_phenomenon", "default_expectation", "puzzle", "research_question",
+        "theoretical_target", "literature_families", "precise_gap", "core_concepts",
+        "concept_neighbors", "actors", "institutional_conditions", "mechanism_chain",
+        "rival_explanations", "evidence_design", "evidence_to_mechanism_map", "main_findings",
+        "theoretical_move", "boundary_conditions", "normative_implication", "intro_structure"
+      ],
+      "properties": {
+        "empirical_phenomenon": {"$ref": "#/$defs/field"},
+        "default_expectation": {"$ref": "#/$defs/field"},
+        "puzzle": {"$ref": "#/$defs/field"},
+        "research_question": {"$ref": "#/$defs/field"},
+        "theoretical_target": {"$ref": "#/$defs/field"},
+        "literature_families": {"$ref": "#/$defs/field"},
+        "precise_gap": {"$ref": "#/$defs/field"},
+        "core_concepts": {"$ref": "#/$defs/field"},
+        "concept_neighbors": {"$ref": "#/$defs/field"},
+        "actors": {"$ref": "#/$defs/field"},
+        "institutional_conditions": {"$ref": "#/$defs/field"},
+        "mechanism_chain": {"$ref": "#/$defs/field"},
+        "rival_explanations": {"$ref": "#/$defs/field"},
+        "evidence_design": {"$ref": "#/$defs/field"},
+        "evidence_to_mechanism_map": {"$ref": "#/$defs/field"},
+        "main_findings": {"$ref": "#/$defs/field"},
+        "theoretical_move": {"$ref": "#/$defs/field"},
+        "boundary_conditions": {"$ref": "#/$defs/field"},
+        "normative_implication": {"$ref": "#/$defs/field"},
+        "intro_structure": {"$ref": "#/$defs/field"}
+      }
+    },
+    "moves": {"type": "array", "items": {"$ref": "#/$defs/move"}},
+    "annotator_notes": {"type": "string"},
+    "meta": {"type": "object"}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["quote", "loc"],
+      "additionalProperties": false,
+      "properties": {
+        "quote": {"type": "string", "minLength": 4, "maxLength": 200},
+        "loc": {"type": "string", "minLength": 2}
+      }
+    },
+    "field": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["present", "absent", "unclear"]},
+        "value": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}
+          ]
+        },
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "present"}}},
+          "then": {"required": ["value", "evidence"], "properties": {"evidence": {"minItems": 1}}}
+        }
+      ]
+    },
+    "move": {
+      "type": "object",
+      "required": ["code", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "code": {"type": "string", "pattern": "^[A-Z]+-[A-Z0-9-]+$"},
+        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+        "note": {"type": "string"}
+      }
+    }
+  }
+}

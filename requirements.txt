@@ -1,0 +1,4 @@
+pyyaml>=6.0
+# optional:
+# jsonschema>=4.10   # stricter annotation schema validation (a built-in fallback is used otherwise)
+# pypdf>=4.0         # read PDF full texts directly (or convert to .txt with pdftotext)

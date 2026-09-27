@@ -1,0 +1,22 @@
+# copyrighted or private research material: never commit
+corpus/fulltext/*
+!corpus/fulltext/.gitkeep
+corpus/abstracts/*
+!corpus/abstracts/.gitkeep
+corpus/annotations/*
+!corpus/annotations/.gitkeep
+runs/
+eval/results/
+eval/packets/
+eval/blind_revision_set/*
+!eval/blind_revision_set/README.md
+
+# python / tooling
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+*.tmp
+.venv/
+.env
+.DS_Store

@@ -1,0 +1,554 @@
+# 导师规则登记表（Rule registry）—— 规则的唯一真源
+#
+# 这里登记的是「研究动作规则」，不是对任何学者观点的概括。
+#   - lenses[].tradition 只记录规则从哪个公开研究传统中抽象而来，**不会**被渲染进 skills/ 目录；
+#   - skills/pa-supervisor-panel/references/lens-cards.md 由 scripts/build_refs.py 从本文件生成；
+#   - 支持度数字由 scripts/pa_distill.py gate 写入 rules/support.json，本文件不手填数字；
+#   - 状态升降由人决定：机器只计数、出报告（见 rules/README.md）。
+#
+# requires：规则的「可计数定义」。每一项是一个子句，论文必须满足全部子句才算支持该规则：
+#   "MECH-TENSION"              该编码出现且有经核验的原文证据
+#   "PZ-ANOMALY|PZ-COEXIST"     任一编码出现即可
+#   "GAP-*"                     该族任一编码
+#   "field:boundary_conditions" 该字段标注为 present 且有经核验的原文证据
+#
+# candidate_sources：预先登记「预期能在哪些论文里找到这条规则」（paper_id 见 corpus/papers.csv）。
+#   这是一份可被证伪的预测：全文标注后，没有出现就不算支持。
+#   用于形成种子规则的论文（seed_source=true）一律不进入留出集。
+
+version: "0.2.0"
+
+statuses:
+  seed: 由代表作摘要、目录与公开信息形成的假设；尚未完成全文标注与 ≥3 篇交叉验证。
+  candidate: 全文标注统计已达到准入门槛（admission），等待留出验证。
+  validated: 通过准入门槛，且在留出集上带来可测的改进（见 eval/prereg.md）。
+  rejected: 标注篇数已足够但支持度不足，或留出验证失败；保留记录，不再进入 Skill。
+
+admission:
+  min_papers: 3            # 至少 3 篇不同论文（训练集）出现
+  min_periods: 2           # 至少跨 2 个时期
+  min_lift: 1.5            # 传统特有规则：在本传统论文中的出现率 ≥ 其他传统的 1.5 倍
+  shared_min_scholar_share: 0.6   # 共享规则：至少 60% 的传统中出现
+  min_annotated_for_rejection: 10 # 某传统至少标注 10 篇后，才允许把低支持规则判为 rejected
+
+lenses:
+  - id: SH
+    name: 共享核心
+    panel: false
+    tradition:
+      keys: []
+      scholars: []
+      note: 各传统共同使用的公共管理研究基本动作。
+    focus: 所有公共管理论文都应满足的问题—机制—证据—贡献链条。
+    questions: []
+    output: ""
+    typical_failure: ""
+
+  - id: IL
+    name: 制度逻辑镜头
+    panel: true
+    tradition:
+      keys: [ZXG]
+      scholars: [周雪光]
+      note: 官僚组织、基层政府行为、控制权与国家治理制度逻辑研究。
+    focus: 稳定、反复、看似违背正式制度目标的治理现象。
+    questions:
+      - 什么现象违背了正式制度的预期，并且反复出现？
+      - 哪两项制度要求在同时起作用、又彼此冲突？
+      - 行动者的应对策略为什么会被复制、被稳定下来？
+      - 同一套逻辑能否同时解释成功与失灵？
+    output: 最缺的一条「制度要求 × 制度要求 → 策略 → 稳定化」机制。
+    typical_failure: 用「压力大」「执行不到位」代替结构分析。
+
+  - id: CE
+    name: 概念工程镜头
+    panel: true
+    tradition:
+      keys: [ZLA]
+      scholars: [周黎安]
+      note: 行政发包制、官员激励与地方政府行为研究。
+    focus: 分散现象的概念统合与概念的区分力。
+    questions:
+      - 核心概念删掉名称后，还剩下什么新解释？
+      - 概念的边界在哪里，非例是什么？
+      - 与最接近的两个既有概念逐维比较，差在哪一维？
+      - 由概念结构能推出哪些可被反驳的命题？
+    output: 概念保留、重构或放弃的判断，以及一张逐维比较表。
+    typical_failure: 概念只有定义，没有维度、比较与推论。
+
+  - id: GT
+    name: 多目标治理镜头
+    panel: true
+    tradition:
+      keys: [HYL]
+      scholars: [何艳玲]
+      note: 城市与地方治理、行政体制改革与大国治理研究。
+    focus: 多目标张力，以及结构变化下的治理回应。
+    questions:
+      - 因变量是否其实包含多个相互牵制的目标？
+      - 这些目标在哪里发生冲突？
+      - 结构或阶段的变化为什么让旧的回应方式失效？
+      - 新范畴比现成的「协同治理」「多元治理」多解释了什么？
+    output: 一个更有解释力的目标张力结构。
+    typical_failure: 宏大叙事多，张力—回应—后果写不实。
+
+  - id: PP
+    name: 政策过程镜头
+    panel: true
+    tradition:
+      keys: [ZXF]
+      scholars: [朱旭峰]
+      note: 政策过程、专家知识、政策创新与扩散研究。
+    focus: 政策过程中的行动者、渠道与可检验关系。
+    questions:
+      - 谁影响了谁，通过什么渠道？
+      - 机制变量能否被直接观察，还是只被假定？
+      - 中国情境改变了哪个理论参数或边界？
+      - 数据设计能否区分竞争解释？
+    output: 最需要补的一项可检验证据。
+    typical_failure: 理论模型很新、材料仍在讲故事；或回归很多、核心机制从未被观测。
+
+  - id: RS
+    name: 改革次序镜头
+    panel: true
+    tradition:
+      keys: [MJ]
+      scholars: [马骏]
+      note: 公共预算、财政制度、问责与改革研究。
+    focus: 改革的目标、条件、能力与次序。
+    questions:
+      - 讨论的是价值目标，还是制度能力？
+      - 失败是因为目标错、条件不具备，还是执行机制不匹配？
+      - 改革有没有先后次序？
+      - 材料证明的是「效果」，还是只证明「形式上实施」？
+    output: 政策含义应如何降级、条件化与排序。
+    typical_failure: 把政策建议提前写进研究问题，最后只能证明「改革很重要」。
+
+  - id: TA
+    name: 理论适用镜头
+    panel: true
+    tradition:
+      keys: [YJX]
+      scholars: [郁建兴]
+      note: 治理理论适用性、社会治理与治理范式转型研究。
+    focus: 理论的适用条件与范式修正。
+    questions:
+      - 原理论成立依赖哪些前提？
+      - 情境改变的是边界、关系、机制，还是概念本身？
+      - 「中国特色」有没有被翻译成可分析的制度条件？
+      - 新范式在哪些场景有效，在哪些场景无效？
+    output: 一句可迁移、可检验的理论命题。
+    typical_failure: 先宣称外来理论不适用，再只做本土描述。
+
+  - id: PI
+    name: 执行博弈镜头
+    panel: true
+    tradition:
+      keys: [DH]
+      scholars: [丁煌]
+      note: 政策执行、利益分析与执行阻滞机制、行政学说史研究。
+    focus: 政策执行中的利益结构、策略互动与阻滞机制。
+    questions:
+      - 政策调整让谁得利、谁受损，他们各有什么应对能力？
+      - 偏差属于哪一类，不同类型是否由不同机制产生？
+      - 变通执行在什么监督、惩罚与信息条件下成为均衡策略？
+      - 对策是否逐条对应阻滞机制的作用环节？
+    output: 一张「利益—策略—阻滞机制—制度杠杆」对照表。
+    typical_failure: 把执行偏差归咎于执行者素质或「认识不到位」，对策与分析脱节。
+
+rules:
+  # ================================================================ SH 共享核心
+  - id: SH-01
+    lens: SH
+    layer: shared
+    status: seed
+    trigger: 用户给出的是政策主题、热点或数据集，而不是问题。
+    action: 先写可观察现象、默认预期与二者的错位，再生成研究问题；理论在错位确定之后才选择。
+    check: 去掉政策名词后，问句仍然是一个有张力、答案不确定的问题。
+    anti_pattern: 先选定理论，再找案例去「印证」。
+    requires: ["PZ-*"]
+    candidate_sources: []
+  - id: SH-02
+    lens: SH
+    layer: shared
+    status: seed
+    trigger: 写文献回顾或引言中的研究缺口。
+    action: 按「它们认为为什么」把文献压成 2–4 类解释，缺口写成某类解释在某条件下的具体失效。
+    check: 缺口句能改写为「既有解释 X 无法说明 Y，因为它假定了 Z」。
+    anti_pattern: 「研究较少」「尚属空白」「缺乏系统研究」。
+    requires: ["GAP-*"]
+    candidate_sources: []
+  - id: SH-03
+    lens: SH
+    layer: shared
+    status: seed
+    trigger: 论文提出机制或分析框架。
+    action: 为每条箭头写出行动者、约束、策略与可观察含义，并指出对应材料。
+    check: 证据—机制对照表中没有空行。
+    anti_pattern: 方框图加箭头，箭头没有过程含义。
+    requires: ["MECH-*", "EVI-*"]
+    candidate_sources: []
+  - id: SH-04
+    lens: SH
+    layer: shared
+    status: seed
+    trigger: 写理论贡献。
+    action: 贡献写成对既有认识的具体改变：边界、关系、机制、概念或统一解释。
+    check: 每条贡献能回指一条缺口，且不以「中国情境」或「新方法」本身为贡献。
+    anti_pattern: 「丰富了 X 理论」「填补了研究空白」。
+    requires: ["CTR-BOUNDARY|CTR-RELATION|CTR-MECHANISM|CTR-CONCEPT|CTR-UNIFY|CTR-GENERALIZE"]
+    candidate_sources: []
+  - id: SH-05
+    lens: SH
+    layer: shared
+    status: seed
+    trigger: 写结论与讨论。
+    action: 明确写出发现成立的边界条件，结论强度与证据类型相匹配。
+    check: 结论部分至少有一条可检验的边界条件。
+    anti_pattern: 单案例推出普遍规律。
+    requires: ["field:boundary_conditions"]
+    candidate_sources: []
+
+  # ================================================================ IL 制度逻辑
+  - id: IL-01
+    lens: IL
+    layer: archetype
+    status: seed
+    trigger: 正式制度目标与基层反复出现的行为持续背离。
+    action: 不先归因为执行偏差；先找出两项同时有效、彼此冲突的制度要求，再检验行动者的策略是否是对这一张力的稳定响应。
+    check: 能写出「要求 A × 要求 B → 策略 S」，且 S 在多个地区或时期重复出现。
+    anti_pattern: 「压力大 → 基层变形」式的单箭头解释。
+    requires: ["PZ-PERSISTENCE|PZ-ANOMALY|PZ-COEXIST", "MECH-TENSION"]
+    candidate_sources: []
+  - id: IL-02
+    lens: IL
+    layer: archetype
+    status: seed
+    trigger: 已经解释了一种应对策略为何出现。
+    action: 继续追问它为何被复制与稳定：找出让它成为默认选项的组织环节，如检查验收方式、责任分担与非正式关系。
+    check: 至少有一个具体的再生产环节得到材料支持。
+    anti_pattern: 只说现象「长期存在」。
+    requires: ["MECH-STABILIZE"]
+    candidate_sources: []
+  - id: IL-03
+    lens: IL
+    layer: archetype
+    status: seed
+    trigger: 论文只解释治理失灵。
+    action: 检验同一制度逻辑能否在不同条件下同时产出有效治理与失灵；只能解释失灵的逻辑可能只是事后归因。
+    check: 能写出该逻辑在何种条件下带来有效治理。
+    anti_pattern: 只挑失败案例来证明一个结构性解释。
+    requires: ["PZ-COEXIST|PZ-VARIATION", "MECH-TENSION|MECH-CONTROL"]
+    candidate_sources: []
+  - id: IL-04
+    lens: IL
+    layer: archetype
+    status: seed
+    trigger: 论文讨论集权、分权或上下级关系。
+    action: 不用集权/分权二分法，而把控制权拆成目标设定、检查验收、激励分配等不同权力，分析它们在层级间的配置组合。
+    check: 能指出每一种控制权归属于哪一层级。
+    anti_pattern: 「中央集权导致……」式的整体判断。
+    requires: ["MECH-CONTROL", "CON-DIMENSION|CON-TYPOLOGY"]
+    candidate_sources: []
+  - id: IL-05
+    lens: IL
+    layer: archetype
+    status: seed
+    trigger: 论文把当代现象当作全新现象。
+    action: 用长时段历史材料追溯当代制度逻辑的来源，区分延续与断裂。
+    check: 给出历史材料与当代现象之间的具体对应。
+    anti_pattern: 只在引言交代历史背景。
+    requires: ["MECH-HISTORICAL", "EVI-HISTORICAL"]
+    candidate_sources: []
+
+  # ================================================================ CE 概念工程
+  - id: CE-01
+    lens: CE
+    layer: archetype
+    status: seed
+    trigger: 多类现象被分散讨论，现有概念各解释一部分。
+    action: 构造一个中层理想类型，用 2–4 个维度界定，并逐维与相邻理想类型比较。
+    check: 比较表完整；删掉概念名称后，维度上的差异依然成立。
+    anti_pattern: 只给概念定义。
+    requires: ["CON-IDEALTYPE|CON-DIMENSION", "CON-CONTRAST"]
+    candidate_sources: []
+  - id: CE-02
+    lens: CE
+    layer: archetype
+    status: seed
+    trigger: 已经提出新概念。
+    action: 由概念结构推出一组可观察命题，并用多个领域的典型事实逐一回收。
+    check: 至少三条命题，每条对应一类现象。
+    anti_pattern: 概念只解释本文的一个案例。
+    requires: ["CON-UNIFY|CTR-UNIFY", "EVI-STYLIZED|EVI-SECONDARY"]
+    candidate_sources: []
+  - id: CE-03
+    lens: CE
+    layer: archetype
+    status: seed
+    trigger: 概念已经维度化。
+    action: 让维度在不同案例上取不同值，用维度组合解释变异：为何有的地区或领域更接近 A 型，有的更接近 B 型。
+    check: 至少两个案例在关键维度上取值不同，且结果随之不同。
+    anti_pattern: 维度只用来描述，不用来解释差异。
+    requires: ["CON-DIMENSION", "PZ-VARIATION|GAP-VARIATION"]
+    candidate_sources: []
+  - id: CE-04
+    lens: CE
+    layer: archetype
+    status: seed
+    trigger: 论文讨论官员激励或地方政府行为。
+    action: 把激励机制写成可检验的关系，用数据检验后再回到制度解释。
+    check: 激励关系有明确的可观察含义与数据检验。
+    anti_pattern: 用「激励扭曲」一词概括所有行为。
+    requires: ["MECH-INCENTIVE", "EVI-PANEL|EVI-SURVEY|EVI-FORMAL-MODEL"]
+    candidate_sources: []
+
+  # ================================================================ GT 多目标治理
+  - id: GT-01
+    lens: GT
+    layer: archetype
+    status: seed
+    trigger: 因变量是「治理有效性」「治理绩效」等综合指标。
+    action: 把因变量拆成多个同时存在、相互牵制的目标，说明张力所在，而不是按单目标优化来分析。
+    check: 能写出「目标 A 与目标 B 在何处冲突」。
+    anti_pattern: 把多个目标并列成一个「综合绩效」。
+    requires: ["PZ-GOAL-TENSION"]
+    candidate_sources: []
+  - id: GT-02
+    lens: GT
+    layer: archetype
+    status: seed
+    trigger: 论文讨论改革或治理方式的变化。
+    action: 先确认社会结构或历史阶段的变化，再解释治理回应的内容为何随之改变：回应什么、如何回应。
+    check: 结构变化与回应内容之间有明确对应。
+    anti_pattern: 把改革写成领导意志或文件出台的结果。
+    requires: ["PZ-SHIFT", "MECH-TRANSLATE|MECH-FEEDBACK|MECH-HISTORICAL"]
+    candidate_sources: []
+  - id: GT-03
+    lens: GT
+    layer: archetype
+    status: seed
+    trigger: 论文用外来的公共管理范畴描述本土实践。
+    action: 从真实实践中提炼分析范畴，并说明它比现成范畴多解释了什么。
+    check: 新范畴能解释现成范畴解释不了的至少一类现象。
+    anti_pattern: 把政策口号直接当作学术概念。
+    requires: ["CON-INDIGENOUS|CON-RECONSTRUCT"]
+    candidate_sources: []
+  - id: GT-04
+    lens: GT
+    layer: archetype
+    status: seed
+    trigger: 论文分析政府的资源配置或支出行为。
+    action: 把政府的多重角色转成可测量的偏好结构，用支出等行为数据识别其优先次序。
+    check: 角色与可测行为之间的对应关系清楚。
+    anti_pattern: 从文件表述推断政府的真实优先次序。
+    requires: ["PZ-GOAL-TENSION|MECH-INCENTIVE", "EVI-PANEL|EVI-DOCUMENT"]
+    candidate_sources: []
+
+  # ================================================================ PP 政策过程
+  - id: PP-01
+    lens: PP
+    layer: archetype
+    status: seed
+    trigger: 论文研究「政策变化」或「政策创新」。
+    action: 把它拆成具体的政策结果、行动者、渠道与制度条件，写出可检验的关系。
+    check: 至少一条关系有对应的数据检验。
+    anti_pattern: 用政策演进的时间线代替解释。
+    requires: ["MECH-DIFFUSION|MECH-KNOWLEDGE", "EVI-EHA|EVI-SURVEY|EVI-PANEL"]
+    candidate_sources: []
+  - id: PP-02
+    lens: PP
+    layer: archetype
+    status: seed
+    trigger: 论文研究政策扩散。
+    action: 区分横向渠道（学习、竞争、模仿）与纵向渠道（上级干预、政府间关系），并在数据中找出二者可以区分的含义。
+    check: 两类渠道各有一条可观察含义，且可在数据中分开。
+    anti_pattern: 只报告采纳数量随时间增长。
+    requires: ["MECH-DIFFUSION", "EVI-EHA"]
+    candidate_sources: []
+  - id: PP-03
+    lens: PP
+    layer: archetype
+    status: seed
+    trigger: 论文讨论专家或知识对决策的影响。
+    action: 追问知识经由什么组织位置与渠道进入哪个政策阶段，区分议程设置与方案选择。
+    check: 渠道与政策阶段都被明确界定。
+    anti_pattern: 笼统地说「专家参与越多越好」。
+    requires: ["MECH-KNOWLEDGE"]
+    candidate_sources: []
+  - id: PP-04
+    lens: PP
+    layer: archetype
+    status: seed
+    trigger: 论文以「中国情境」作为理论推进的依据。
+    action: 把情境改写成可分析的制度条件，如政府间关系、试点制度、干部人事制度，并作为调节条件进入分析，而不是作为背景介绍。
+    check: 制度条件在分析中有取值变化或明确的作用路径。
+    anti_pattern: 在引言写一段国情介绍后不再出现。
+    requires: ["GAP-CONDITION|PZ-MISFIT", "CTR-BOUNDARY|CTR-RELATION"]
+    candidate_sources: []
+  - id: PP-05
+    lens: PP
+    layer: archetype
+    status: seed
+    trigger: 论文有从中国经验出发的理论抱负。
+    action: 从中国问题反推更一般的政策过程理论议程，写明它在比较情境中如何被检验。
+    check: 命题或议程可以在其他国家或地区检验。
+    anti_pattern: 以「中国特色」为终点。
+    requires: ["CTR-GENERALIZE|CTR-AGENDA"]
+    candidate_sources: []
+
+  # ================================================================ RS 改革次序
+  - id: RS-01
+    lens: RS
+    layer: archetype
+    status: seed
+    trigger: 论文讨论一项改革。
+    action: 区分规范目标与现实条件，区分近期目标与远期目标，并说明推进次序。
+    check: 目标有排序，每个目标写明实现前提。
+    anti_pattern: 一次性列出全部理想目标。
+    requires: ["NRM-GOAL-COND-SEQ"]
+    candidate_sources: []
+  - id: RS-02
+    lens: RS
+    layer: archetype
+    status: seed
+    trigger: 论文声称某项改革已经实施。
+    action: 检验制度是否真正产生了预期的控制、责任或绩效能力，用组织内部材料区分「表格上的改革」与「能力上的改革」。
+    check: 有材料直接观察到制度能力，而不只是制度文本。
+    anti_pattern: 以文件出台或机构设立作为改革成功的证据。
+    requires: ["NRM-CAPACITY-AUDIT|MECH-CAPACITY", "EVI-FIELDWORK|EVI-DOCUMENT"]
+    candidate_sources: []
+  - id: RS-03
+    lens: RS
+    layer: archetype
+    status: seed
+    trigger: 论文分析改革失败或效果不彰。
+    action: 区分三类原因：目标错误、条件不具备、执行机制不匹配，并用证据逐一排除。
+    check: 三类原因各有证据判断。
+    anti_pattern: 直接归因为「执行不力」。
+    requires: ["MECH-CAPACITY|MECH-SEQUENCE", "EVI-RIVAL-TEST"]
+    candidate_sources: []
+  - id: RS-04
+    lens: RS
+    layer: archetype
+    status: seed
+    trigger: 论文给出政策建议。
+    action: 把建议写成有条件、有次序的方案，并说明每一步的前提。
+    check: 每条建议写明前提条件与先后关系。
+    anti_pattern: 与分析脱节的通用对策清单。
+    requires: ["CTR-POLICY-COND|NRM-MECH-TO-REMEDY"]
+    candidate_sources: []
+  - id: RS-05
+    lens: RS
+    layer: archetype
+    status: seed
+    trigger: 论文研究财政或预算问题。
+    action: 把预算过程当作观察国家治理能力与问责关系的窗口，从预算机构的实际权力推断治理能力。
+    check: 预算过程中的具体权力或程序被用作证据。
+    anti_pattern: 把预算当作纯技术性的会计问题。
+    requires: ["MECH-CAPACITY|MECH-CONTROL", "CTR-GENERALIZE|CTR-BOUNDARY"]
+    candidate_sources: []
+
+  # ================================================================ TA 理论适用
+  - id: TA-01
+    lens: TA
+    layer: archetype
+    status: seed
+    trigger: 论文引入一个流行理论。
+    action: 先还原理论成立的必要条件，再逐条比对研究情境是否满足；不做「适用/不适用」的二元判断。
+    check: 有一张「前提—原情境—本情境—机制后果」对照表。
+    anti_pattern: 「西方理论不适合中国」。
+    requires: ["PZ-MISFIT|GAP-CONDITION"]
+    candidate_sources: []
+  - id: TA-02
+    lens: TA
+    layer: archetype
+    status: seed
+    trigger: 论文判断理论的适用性。
+    action: 把适用性写成「结构条件 × 行动者选择」的组合：结构条件限定可能性，行动者策略决定实现程度。
+    check: 结构条件与行动者选择都有经验指向。
+    anti_pattern: 只看制度结构，或只看个别行动者。
+    requires: ["PZ-MISFIT|GAP-CONDITION", "CTR-BOUNDARY|CTR-RELATION"]
+    candidate_sources: []
+  - id: TA-03
+    lens: TA
+    layer: archetype
+    status: seed
+    trigger: 论文讨论阶段性变化，如技术变革或发展阶段转换。
+    action: 比较前后阶段的治理方案，把变化写成范式层面的整体转变（目标、工具、关系的组合），并说明新范式的适用场景。
+    check: 新旧范式在目标、工具、关系三方面各有对照。
+    anti_pattern: 用「新范式」包装单项工具的变化。
+    requires: ["PZ-SHIFT", "CON-RECONSTRUCT|CON-TYPOLOGY|CTR-CONCEPT"]
+    candidate_sources: []
+  - id: TA-04
+    lens: TA
+    layer: archetype
+    status: seed
+    trigger: 论文提出一个分析框架。
+    action: 给出概念定义、制度化机制与适用边界；框架要能区分「是」与「不是」。
+    check: 框架能判定至少一个反例不属于它。
+    anti_pattern: 框架能套用于一切现象。
+    requires: ["CON-DIMENSION|CON-IDEALTYPE", "field:boundary_conditions"]
+    candidate_sources: []
+
+  # ================================================================ PI 执行博弈
+  - id: PI-01
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文研究政策执行偏差或「上有政策、下有对策」。
+    action: 以利益分析为起点：识别政策调整带来的利益得失，逐一列出政策制定者、执行者与目标群体的利益与应对能力。
+    check: 利益表覆盖所有关键行动者，并写明各自的应对能力。
+    anti_pattern: 把偏差归咎于执行者素质或「认识不到位」。
+    requires: ["MECH-INTEREST"]
+    candidate_sources: []
+  - id: PI-02
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文把各种执行偏差当作同一个因变量。
+    action: 先把偏差类型化（如象征式、选择式、附加式、替代式执行），给出判别标准，再为不同类型寻找不同机制。
+    check: 类型有明确判别标准，且不同类型对应不同解释。
+    anti_pattern: 用一个「执行不力」涵盖所有偏差。
+    requires: ["CON-TYPOLOGY|CON-DIMENSION", "PZ-ANOMALY|PZ-PERSISTENCE|PZ-VARIATION"]
+    candidate_sources: []
+  - id: PI-03
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文需要解释变通执行为何持续。
+    action: 把上下级互动写成博弈：参与者、策略、收益与信息结构，求出变通成为均衡策略的条件（监督概率、惩罚强度、信息不对称）。
+    check: 均衡条件被写出，并与材料中的可观察情形对应。
+    anti_pattern: 只在修辞上使用「博弈」一词。
+    requires: ["MECH-GAME", "MECH-INFO|MECH-INCENTIVE"]
+    candidate_sources: []
+  - id: PI-04
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文解释执行阻滞。
+    action: 同时分析行动者行为（有限理性、自利）与制度安排（监督、责任、激励），说明二者如何共同产生阻滞。
+    check: 行为层与制度层各有证据，且二者的互动被写出。
+    anti_pattern: 只谈制度缺陷，或只谈个人动机。
+    requires: ["MECH-INTEREST|MECH-GAME", "MECH-CONTROL|MECH-INCENTIVE|MECH-INFO"]
+    candidate_sources: []
+  - id: PI-05
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文提出防治对策。
+    action: 对策逐条对应阻滞机制的作用环节：改变收益结构、提高监督有效性或减少信息不对称。
+    check: 每条对策能回指一个阻滞环节。
+    anti_pattern: 「加强监督、完善制度、提高认识」式的通用对策。
+    requires: ["NRM-MECH-TO-REMEDY"]
+    candidate_sources: []
+  - id: PI-06
+    lens: PI
+    layer: archetype
+    status: seed
+    trigger: 论文借用外来的行政学理论。
+    action: 先追溯理论的学说史谱系与它原本要回答的问题，再判断其中哪些部分可以用于当前问题。
+    check: 写明理论原初问题与当前问题的异同。
+    anti_pattern: 只摘取理论的结论性表述。
+    requires: ["CON-GENEALOGY"]
+    candidate_sources: []

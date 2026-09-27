@@ -1,0 +1,310 @@
+# 稿件缺陷编码（Defect codes）
+#
+# 用途：
+#   1. pa-paper-reviewer / pa-supervisor-panel 输出诊断时统一用这些编码；
+#   2. pa-revision-responder 给审稿意见归类；
+#   3. 导师批注蒸馏（pa-scholar-distiller Route B）把批注映射到编码后做频次统计。
+#
+# severity 默认值：fatal = 不修就不成立；major = 明显影响发表；minor = 影响质量但不致命。
+# 实际严重度可以按稿件调整，但调整时要说明理由。
+
+version: "0.2.0"
+
+groups:
+  Q: 问题意识
+  L: 文献对话
+  C: 概念
+  M: 机制
+  E: 证据与设计
+  T: 理论贡献
+  N: 规范与政策含义
+  P: 表达与规范
+
+defects:
+  # ---------------------------------------------------------------- Q
+  - code: Q1
+    group: Q
+    label: 有题无问
+    severity: fatal
+    symptom: 研究问题只是一个政策主题或领域，例如「数字政府对基层治理的影响研究」。
+    test: 能否写出一个不知道答案也成立、且答案可能出人意料的问句？
+    fix: 回到现象，写出默认预期与反常，再生成问句。
+    route: pa-question-framer
+  - code: Q2
+    group: Q
+    label: 预设答案
+    severity: major
+    symptom: 问题里已经写好答案或立场，例如「如何推动 X 高质量发展」「X 为何有效」。
+    test: 把问题交给持相反立场的人，他能否用同样的材料给出不同答案？
+    fix: 把「如何推动」改成「为何在某条件下出现某结果」。
+    route: pa-question-framer
+  - code: Q3
+    group: Q
+    label: 伪困惑
+    severity: major
+    symptom: 所谓「反常」只是与一个无人持有的稻草人预期相比才显得奇怪。
+    test: 预期是否来自真实存在的理论、制度设计或主流研究？
+    fix: 用可引证的既有解释重写预期；找不到就换困惑。
+    route: pa-question-framer
+  - code: Q4
+    group: Q
+    label: 问题过大
+    severity: major
+    symptom: 一篇论文试图回答整个领域的问题，材料只能覆盖其中一角。
+    test: 现有材料能否回答问题的每一个组成部分？
+    fix: 把问题收缩到材料能回答的层级、时段或机制环节。
+    route: pa-question-framer
+
+  # ---------------------------------------------------------------- L
+  - code: L1
+    group: L
+    label: 文献堆砌
+    severity: major
+    symptom: 按作者或年份逐篇罗列文献，看不出各类解释之间的分歧。
+    test: 能否把文献压成 2–4 类「它们认为为什么」的解释？
+    fix: 按解释路径重组文献，写出每类解释的核心主张与失效条件。
+    route: pa-literature-mapper
+  - code: L2
+    group: L
+    label: 空泛缺口
+    severity: major
+    symptom: 用「研究较少」「尚属空白」「缺乏系统研究」作为缺口。
+    test: 缺口是否指向某类解释在某条件下的具体失效？
+    fix: 改写为「既有解释 X 无法说明 Y，因为它假定了 Z」。
+    route: pa-literature-mapper
+  - code: L3
+    group: L
+    label: 竞争解释缺位
+    severity: major
+    symptom: 全文只有作者自己的解释，没有认真对待其他可能的解释。
+    test: 最强的竞争解释是什么？论文是否说明了为何它解释不了材料？
+    fix: 至少写出一个竞争解释及其可观察含义，并与材料对照。
+    route: pa-research-design
+  - code: L4
+    group: L
+    label: 引用不实
+    severity: fatal
+    symptom: 引用无法核验，或被引文献并不支持对应论断。
+    test: 每条关键引用能否在数据库中找到，且原文确实支持该论断？
+    fix: 逐条核验；找不到的删除或改写论断。
+    route: pa-literature-mapper
+
+  # ---------------------------------------------------------------- C
+  - code: C1
+    group: C
+    label: 概念换名
+    severity: major
+    symptom: 提出新术语，但删掉术语后剩下的解释与既有研究无异。
+    test: 新概念相对最接近的两个既有概念，在哪个维度上不同？差异带来了什么新解释？
+    fix: 补齐边界、维度、相邻概念比较与可推出命题；做不到就放弃新词。
+    route: pa-concept-mechanism-builder
+  - code: C2
+    group: C
+    label: 边界不清
+    severity: major
+    symptom: 概念没有外延，看不出什么案例不属于它。
+    test: 能否举出一个表面相似但不属于该概念的反例？
+    fix: 写出必要属性与明确的非例。
+    route: pa-concept-mechanism-builder
+  - code: C3
+    group: C
+    label: 层级混用
+    severity: major
+    symptom: 同一概念时而指个体行为，时而指组织结构或制度安排。
+    test: 概念的分析单位是否在全文保持一致？
+    fix: 固定分析单位；不同层级用不同术语。
+    route: pa-concept-mechanism-builder
+  - code: C4
+    group: C
+    label: 术语漂移
+    severity: minor
+    symptom: 「机制、逻辑、路径、范式、模式」混用，或同一现象换着名字说。
+    test: 每个核心术语是否在首次出现时定义，且全文含义不变？
+    fix: 建术语表，统一用法。
+    route: pa-prose-polisher
+
+  # ---------------------------------------------------------------- M
+  - code: M1
+    group: M
+    label: 黑箱箭头
+    severity: fatal
+    symptom: 「压力导致形式主义」式的单箭头，中间过程缺失。
+    test: 每条箭头能否回答「谁、因为什么约束、采取什么行动、导致什么」？
+    fix: 把箭头拆成行动者—约束—策略—互动—结果的链条。
+    route: pa-concept-mechanism-builder
+  - code: M2
+    group: M
+    label: 行动者缺位
+    severity: major
+    symptom: 机制里只有「制度」「压力」「环境」，没有具体行动者。
+    test: 每个环节是否能指出行动主体？
+    fix: 为每个环节补上行动者及其目标与约束。
+    route: pa-concept-mechanism-builder
+  - code: M3
+    group: M
+    label: 机制不可观测
+    severity: major
+    symptom: 机制环节只能被推想，没有任何材料可以观察。
+    test: 每个环节能否写出一条可观察含义以及对应的材料来源？
+    fix: 建立证据—机制对照表，补证据或降格为推论。
+    route: pa-research-design
+  - code: M4
+    group: M
+    label: 竞争机制未排除
+    severity: major
+    symptom: 另一条机制同样能产生观察到的结果，但论文没有区分。
+    test: 两条机制在哪些可观察含义上不同？论文检查了吗？
+    fix: 找出区分性证据；没有就诚实报告为待检验。
+    route: pa-research-design
+  - code: M5
+    group: M
+    label: 框架图空转
+    severity: major
+    symptom: 分析框架只是一张方框图，箭头没有机制含义，方框没有可观察指标。
+    test: 框架图的每个方框能否被测量或观察？每条箭头是否对应一个机制？
+    fix: 为方框写观察指标、为箭头写机制；删掉不承重的部分。
+    route: pa-concept-mechanism-builder
+
+  # ---------------------------------------------------------------- E
+  - code: E1
+    group: E
+    label: 材料错层
+    severity: fatal
+    symptom: 用个体层材料回答制度层问题，或用单点材料回答普遍性问题。
+    test: 材料的层级与范围是否与研究问题一致？
+    fix: 调整问题层级，或补充对应层级的材料。
+    route: pa-research-design
+  - code: E2
+    group: E
+    label: 案例选择无理据
+    severity: major
+    symptom: 案例选择只写「典型」「具有代表性」「便于进入」。
+    test: 案例相对于研究问题是什么类型（典型、偏差、关键、最相似、最差异）？
+    fix: 写出选择逻辑，并说明它允许什么推论、不允许什么推论。
+    route: pa-research-design
+  - code: E3
+    group: E
+    label: 结论超出证据
+    severity: fatal
+    symptom: 单案例推出普遍规律，相关关系写成因果，或把局部发现写成理论重构。
+    test: 每个结论句的强度是否与支持它的证据相匹配？
+    fix: 降低措辞强度，写明适用范围与边界。
+    route: pa-prose-polisher
+  - code: E4
+    group: E
+    label: 证据不可追溯
+    severity: major
+    symptom: 大段访谈引语堆砌、没有编号与来源说明，或「笔者调研发现」无从核查。
+    test: 每条关键判断能否指向具体的资料编号或来源？
+    fix: 建立资料编码表；访谈引语服务于论点、而非代替论点。
+    route: pa-research-design
+  - code: E5
+    group: E
+    label: 识别威胁未处理
+    severity: major
+    symptom: 试点非随机选择、反向因果、遗漏变量等威胁未讨论。
+    test: 最强的识别威胁是什么？论文如何应对？
+    fix: 讨论并检验主要威胁；做不到就降低因果措辞。
+    route: pa-research-design
+  - code: E6
+    group: E
+    label: 测量效度存疑
+    severity: major
+    symptom: 用政策文件数量、新闻数量等代理变量测量难以观测的构念，未做效度检验。
+    test: 测量是否真的捕捉到构念，而不是捕捉到文本回应或宣传强度？
+    fix: 补充效度检验或换用更贴近构念的测量。
+    route: pa-research-design
+
+  # ---------------------------------------------------------------- T
+  - code: T1
+    group: T
+    label: 情境替换冒充贡献
+    severity: fatal
+    symptom: 「国外研究了 X，本文研究中国的 X」即被当作理论贡献。
+    test: 中国的制度条件改变了原理论的哪个前提、关系或机制？
+    fix: 把「中国情境」翻译为可分析的制度条件，并说明其理论后果。
+    route: pa-theory-localizer
+  - code: T2
+    group: T
+    label: 方法冒充贡献
+    severity: major
+    symptom: 把使用新方法、新数据或大模型当作首要理论贡献。
+    test: 新方法让哪个过去不可观测的机制首次可检验？
+    fix: 把方法贡献降为次要，或改写为「使某机制首次可检验」。
+    route: pa-paper-reviewer
+  - code: T3
+    group: T
+    label: 贡献与缺口不对应
+    severity: major
+    symptom: 引言写的缺口与结论写的贡献对不上。
+    test: 每一条贡献能否回指引言中的一条缺口？
+    fix: 逐条对齐缺口与贡献，删掉无对应的部分。
+    route: pa-intro-drafter
+  - code: T4
+    group: T
+    label: 例外论
+    severity: major
+    symptom: 结论是「中国独一无二」，无法在其他情境检验。
+    test: 贡献能否改写成「在条件 C 下，机制 M 会怎样」？
+    fix: 用制度条件替代国别标签，写出可迁移命题。
+    route: pa-theory-localizer
+  - code: T5
+    group: T
+    label: 过度理论化
+    severity: major
+    symptom: 用宏大概念包装有限发现，例如单案例提出「新范式」。
+    test: 删掉大词之后，发现本身支持到什么程度？
+    fix: 把理论主张收缩到证据能支持的层级。
+    route: pa-paper-reviewer
+
+  # ---------------------------------------------------------------- N
+  - code: N1
+    group: N
+    label: 应然实然混写
+    severity: major
+    symptom: 把「应当如何」与「实际如何」写在同一句或同一段中。
+    test: 每个判断是经验命题还是规范命题？
+    fix: 分开论证；规范部分单独成节。
+    route: pa-prose-polisher
+  - code: N2
+    group: N
+    label: 对策泛化
+    severity: minor
+    symptom: 结论给出「加强顶层设计、完善考核机制、提升能力」等与分析脱节的对策。
+    test: 每条对策能否回指一个已识别的机制环节与一个适用前提？
+    fix: 只保留由机制推出的对策，并写明条件。
+    route: pa-section-writer
+
+  # ---------------------------------------------------------------- P
+  - code: P1
+    group: P
+    label: 公文腔/口号化
+    severity: minor
+    symptom: 「高度重视、全面推进、取得显著成效、赋能、重塑」等政策语言充当论证。
+    test: 删掉这些词后句子是否仍有分析内容？
+    fix: 政策语言只作为被研究对象加引号引用；作者自己的句子写成行动者—行为—结果。
+    route: pa-prose-polisher
+  - code: P2
+    group: P
+    label: AI 腔/空转句
+    severity: minor
+    symptom: 「值得注意的是」「具有重要的理论意义和现实意义」「综上所述」等无信息句，或机械排比。
+    test: 这句话删掉后，论证是否少了任何信息？
+    fix: 删除或改写为具体判断。
+    route: pa-prose-polisher
+  - code: P3
+    group: P
+    label: 长句逻辑断裂
+    severity: minor
+    symptom: 「通过……从而……进而……」长链条中某一环没有证据或主语切换。
+    test: 拆成短句后每一环是否都成立？
+    fix: 拆句；每句一个判断；无证据的环节删去或降格。
+    route: pa-prose-polisher
+  - code: P4
+    group: P
+    label: 格式不规范
+    severity: minor
+    symptom: 引文格式、标点、数字用法、图表编号与期刊要求不一致。
+    test: 是否逐项对照了目标期刊投稿须知？
+    fix: 按投稿须知统一格式。
+    route: pa-journal-fit

@@ -1,0 +1,528 @@
+# 研究动作编码本（Research-move codebook）
+#
+# 用途：
+#   1. 逐篇标注时给论文的「研究动作」打码（distill/prompts/annotate_paper.md 会注入本文件）；
+#   2. 统计各研究传统的动作频率、支持度与区分度（scripts/pa_distill.py aggregate/gate/mine）；
+#   3. 留出验证 Task A 的预测目标（scripts/pa_distill.py holdout）。
+#
+# 规则：
+#   - 只在论文里能找到原文证据时才打码；
+#   - 一篇论文每族通常 1–4 个码，不要为了「覆盖」而堆码；
+#   - 编码本随标注迭代修订：改动定义要升 version，并在每条标注里记录 codebook_version；
+#   - example 一律是虚构教学示例，不对应任何真实论文。
+
+version: "0.2.0"
+
+families:
+  PZ:
+    label: 问题/困惑类型
+    question: 这篇论文为什么「必须」被写出来？现实与预期之间哪里对不上？
+  GAP:
+    label: 缺口类型
+    question: 既有解释具体在哪里失效？
+  CON:
+    label: 概念动作
+    question: 论文如何制造、比较或重构分析范畴？
+  MECH:
+    label: 机制动作
+    question: 从条件到结果，中间靠哪类过程连接？
+  EVI:
+    label: 证据动作
+    question: 论文用什么材料、以什么方式让机制可被观察或检验？
+  CTR:
+    label: 贡献动作
+    question: 论文声称改变了哪一条既有认识？
+  NRM:
+    label: 规范/改革动作
+    question: 论文如何处理「应该」与「能够」之间的关系？
+
+moves:
+  # ---------------------------------------------------------------- PZ
+  - code: PZ-ANOMALY
+    family: PZ
+    label: 反常
+    definition: 现实结果与既有理论或制度设计的预期方向相反。
+    include: 文中明确写出预期（理论/制度/常识）与相反的实际结果。
+    exclude: 只描述问题严重、没有给出预期方向的「问题陈述」。
+    example: （虚构）考核指标越细，上报数据的可信度反而越低。
+  - code: PZ-COEXIST
+    family: PZ
+    label: 并存悖论
+    definition: 两种看似互斥的特征或结果在同一制度中长期并存。
+    include: 文中把两种相互冲突的现象并置，并追问二者何以同时成立。
+    exclude: 仅罗列多个问题而不讨论其互斥性。
+    example: （虚构）同一项改革中，上级控制显著加强，基层变通空间却同步扩大。
+  - code: PZ-VARIATION
+    family: PZ
+    label: 变异/异质性
+    definition: 同一制度或政策在不同地区、组织、层级或群体中产生系统性不同的结果。
+    include: 文中以「为何在甲地有效、在乙地失效」之类的比较作为问题起点。
+    exclude: 只在稳健性检验里顺带做异质性分析、并非问题来源。
+    example: （虚构）同一数字平台在两个街道分别带来减负和增负。
+  - code: PZ-SHIFT
+    family: PZ
+    label: 转变
+    definition: 治理方式、机制或关系在某个时间点前后发生结构性变化，论文追问为何此时、如何变化。
+    include: 明确的时间分期与「从 A 到 B」式的转变问题。
+    exclude: 只是按时间顺序叙述政策演进、没有提出转变之谜。
+    example: （虚构）监督方式为何从事后问责转向过程支持。
+  - code: PZ-PERSISTENCE
+    family: PZ
+    label: 稳定谜题
+    definition: 正式制度反复调整，某种行为模式却长期稳定（或反之）。
+    include: 文中强调「屡禁不止」「反复出现」「改革多轮而不变」并追问其稳定来源。
+    exclude: 单次事件或偶发现象。
+    example: （虚构）减负文件多轮下发，基层填报负担换了形式却持续存在。
+  - code: PZ-BLACKBOX
+    family: PZ
+    label: 过程黑箱
+    definition: X 与 Y 的关联已被观察到，但中间过程不清楚，论文以打开过程为目标。
+    include: 文中明确指出既有研究「只知相关、不知如何」。
+    exclude: 论文只检验 X 对 Y 的净效应、不讨论过程。
+    example: （虚构）已知专家参与与政策采纳相关，但专家意见如何进入决策不清楚。
+  - code: PZ-GOAL-TENSION
+    family: PZ
+    label: 目标张力
+    definition: 治理主体同时面对多个不能同时最大化的目标，论文追问目标如何被排序、统筹或转换。
+    include: 文中把因变量拆成多个相互牵制的目标。
+    exclude: 把多个目标简单并列、不讨论它们之间的冲突。
+    example: （虚构）发展、安全与民生三类目标在同一次城市更新中相互挤压。
+  - code: PZ-MISFIT
+    family: PZ
+    label: 理论失配
+    definition: 流行理论的前提条件在所研究的情境中不成立，导致其预测失准。
+    include: 文中指出理论的具体前提，并说明哪一条前提在此处不成立。
+    exclude: 笼统地说「西方理论不适合中国」。
+    example: （虚构）以多中心为前提的治理理论遇到强纵向控制时，预测的自组织没有出现。
+  - code: PZ-EMERGENCE
+    family: PZ
+    label: 新现象命名
+    definition: 一类新实践或新组织形态无法被既有范畴容纳，论文以命名与界定为核心任务。
+    include: 文中论证既有概念放不下该现象，并提出界定。
+    exclude: 只是给熟悉的现象换一个新名字。
+    example: （虚构）某地出现的「跨部门联合值守」既不是常设机构，也不是临时议事协调机构。
+
+  # ---------------------------------------------------------------- GAP
+  - code: GAP-ACTOR
+    family: GAP
+    label: 遗漏行动者
+    definition: 既有解释忽略了对结果有实质影响的行动者或其能动性。
+    include: 文中点名被忽略的行动者，并说明其为何关键。
+    exclude: 只是说「多元主体研究不足」。
+    example: （虚构）既有研究只看上下级政府，忽略了承接外包的技术公司。
+  - code: GAP-PROCESS
+    family: GAP
+    label: 过程黑箱化
+    definition: 既有解释跳过了从条件到结果的中间过程。
+    include: 文中指出既有研究中缺失的具体环节。
+    exclude: 泛泛地说「机制有待深入」。
+    example: （虚构）既有研究把「压力」直接连到「形式主义」，中间的策略选择缺失。
+  - code: GAP-CONDITION
+    family: GAP
+    label: 隐含前提
+    definition: 既有解释依赖一个未言明、且在研究情境中不成立或不稳定的前提。
+    include: 文中把隐含前提显性化并加以质疑。
+    exclude: 只指出「情境不同」。
+    example: （虚构）既有扩散研究默认地方政府可以自主选择是否采纳。
+  - code: GAP-VARIATION
+    family: GAP
+    label: 无法解释变异
+    definition: 既有解释预测同质结果，无法说明观察到的系统差异。
+    include: 文中用既有解释推不出的差异作为缺口。
+    exclude: 只说「缺少比较研究」。
+    example: （虚构）晋升激励解释不了同一省内相邻县的截然不同的执行力度。
+  - code: GAP-TEMPORAL
+    family: GAP
+    label: 无法解释时间动态
+    definition: 既有解释是静态的，无法说明转变、周期或时序效应。
+    include: 文中指出既有解释对「为何在此时变化」沉默。
+    exclude: 只是强调研究「最新」。
+    example: （虚构）既有研究无法解释治理方式的周期性收放。
+  - code: GAP-LEVEL
+    family: GAP
+    label: 层级混淆
+    definition: 既有解释混用了个体、组织、制度等分析层级，或用一个层级的证据推断另一层级。
+    include: 文中指出层级错配及其后果。
+    exclude: 只说「宏观研究多、微观研究少」。
+    example: （虚构）用官员个人特征解释一个组织层面的制度稳定。
+  - code: GAP-FRAGMENT
+    family: GAP
+    label: 解释碎片化
+    definition: 多种解释各自成立却互不连通，缺少能统合它们的概念或框架。
+    include: 文中把碎片化本身当作问题，并提出统合框架。
+    exclude: 只是罗列研究视角。
+    example: （虚构）项目制、运动式治理、压力型体制各解释一部分现象，缺少共同维度。
+  - code: GAP-CONCEPT
+    family: GAP
+    label: 概念失效
+    definition: 既有概念被过度拉伸、边界模糊或无法区分关键案例。
+    include: 文中展示概念拉伸的具体后果。
+    exclude: 只抱怨「概念使用混乱」。
+    example: （虚构）「协同治理」被用来描述几乎所有跨部门合作，失去区分力。
+  - code: GAP-MEASURE
+    family: GAP
+    label: 测量/识别缺陷
+    definition: 既有证据设计无法区分竞争解释，或核心构念测量效度不足。
+    include: 文中说明既有设计为何分不开两种解释。
+    exclude: 只说「样本不够大」。
+    example: （虚构）以政策文件数量衡量执行力度，无法区分真执行与文本回应。
+  - code: GAP-NORM-EMP
+    family: GAP
+    label: 规范经验混淆
+    definition: 既有研究把规范倡议当作经验发现，或把经验描述当作规范论证。
+    include: 文中指出应然与实然的混写。
+    exclude: 一般性的方法批评。
+    example: （虚构）把「应当建立协同机制」写成「协同机制已发挥作用」。
+
+  # ---------------------------------------------------------------- CON
+  - code: CON-IDEALTYPE
+    family: CON
+    label: 理想类型
+    definition: 构造一个由若干核心属性界定的理想类型，用于对照现实。
+    include: 文中给出属性组合，并说明现实案例与理想类型的距离。
+    exclude: 只有概念名称、没有属性组合。
+    example: （虚构）以「任务下沉、责任兜底、资源自筹」三属性界定一种治理形态。
+  - code: CON-DIMENSION
+    family: CON
+    label: 维度化
+    definition: 把概念拆成 2–4 个可比较的维度。
+    include: 维度彼此独立，且各有取值。
+    exclude: 维度只是同义词堆叠。
+    example: （虚构）用控制权配置、激励强度、考核方式三维度刻画政府间关系。
+  - code: CON-CONTRAST
+    family: CON
+    label: 相邻概念比较
+    definition: 与最接近的既有概念逐维比较，说明差异落在哪个维度。
+    include: 明确的比较表或逐维论述。
+    exclude: 只说「与 X 不同」而不给出维度。
+    example: （虚构）逐维对比新概念与科层制、外包制的差别。
+  - code: CON-TYPOLOGY
+    family: CON
+    label: 类型学
+    definition: 用两个或多个维度交叉生成类型，并为每个类型给出案例或说明空格。
+    include: 类型由维度交叉产生，各类型有经验对应。
+    exclude: 四格里全是作者自己的案例、无区分意义。
+    example: （虚构）按「上级关注度 × 基层自主度」生成四种执行类型。
+  - code: CON-UNIFY
+    family: CON
+    label: 统合概念
+    definition: 用一个概念统一解释多类过去被分散讨论的现象。
+    include: 文中列出被统合的多类现象并逐一回收。
+    exclude: 概念只解释本文一个案例。
+    example: （虚构）用同一概念同时解释考核加码、指标分解与责任下沉。
+  - code: CON-RECONSTRUCT
+    family: CON
+    label: 概念重构
+    definition: 修正既有概念的内涵、外延或维度，使其能容纳新观察。
+    include: 明确指出原概念哪一部分被修改。
+    exclude: 沿用原概念、只加定语。
+    example: （虚构）把「政策试验」从「地方先行」重构为「上下协同的试错」。
+  - code: CON-GENEALOGY
+    family: CON
+    label: 谱系溯源
+    definition: 在使用概念或理论前，追溯其学说史来源、原初问题与前提。
+    include: 文中梳理理论谱系，并说明谱系如何影响其适用条件。
+    exclude: 一般性的文献回顾。
+    example: （虚构）追溯某行政理论的产生背景，说明其原本针对的是何种组织问题。
+  - code: CON-INDIGENOUS
+    family: CON
+    label: 实践范畴提炼
+    definition: 从实践语言或本土经验中提炼分析范畴，并把它翻译成可比较的一般维度。
+    include: 既保留实践语义，又给出可迁移的维度或属性。
+    exclude: 直接把政策口号当作学术概念。
+    example: （虚构）把基层说法「兜底」提炼为「剩余责任的纵向配置」。
+
+  # ---------------------------------------------------------------- MECH
+  - code: MECH-TENSION
+    family: MECH
+    label: 结构张力→策略
+    definition: 两项同时有效、彼此冲突的制度要求，迫使行动者形成可预期的应对策略。
+    include: 文中写出「要求 A × 要求 B → 策略 S」的结构。
+    exclude: 单一「压力」导致的行为变形。
+    example: （虚构）「统一标准」与「因地制宜」同时被问责，基层以「材料达标」化解。
+  - code: MECH-INCENTIVE
+    family: MECH
+    label: 激励结构
+    definition: 考核、晋升、财政或声誉激励改变行动者的收益与风险。
+    include: 说明激励如何改变选择集合或收益排序。
+    exclude: 只说「激励不足」。
+    example: （虚构）排名考核让街道优先处理可量化工单。
+  - code: MECH-INFO
+    family: MECH
+    label: 信息与可见性
+    definition: 信息不对称、可见性或可核查性的变化改变控制与应对方式。
+    include: 说明谁掌握什么信息、谁能核查、这如何改变行为。
+    exclude: 只说「信息化水平提高」。
+    example: （虚构）平台留痕让上级可见过程，基层把精力转向「可见」环节。
+  - code: MECH-CONTROL
+    family: MECH
+    label: 控制权配置
+    definition: 目标设定、检查验收、激励分配等控制权在层级间的配置塑造治理结果。
+    include: 明确区分不同控制权及其归属。
+    exclude: 笼统地说「集权/分权」。
+    example: （虚构）上级保留验收权而下放执行权，形成特定的应对策略。
+  - code: MECH-GAME
+    family: MECH
+    label: 策略互动/博弈
+    definition: 用行动者之间的策略互动（形式或非形式博弈）解释结果，关注均衡条件。
+    include: 文中写出参与者、策略、收益与均衡条件。
+    exclude: 只是修辞性地使用「博弈」一词。
+    example: （虚构）监督概率与惩罚力度的组合决定变通执行是否为均衡策略。
+  - code: MECH-INTEREST
+    family: MECH
+    label: 利益结构
+    definition: 分析政策调整对不同行动者利益的分配效应，以利益得失解释行为。
+    include: 逐一识别受益者与受损者及其应对能力。
+    exclude: 只说「利益冲突」而不识别主体。
+    example: （虚构）新规则压缩了中间层的自由裁量收益，引发选择性执行。
+  - code: MECH-STABILIZE
+    family: MECH
+    label: 稳定化/再生产
+    definition: 说明某种策略或安排为何被重复、制度化或自我强化。
+    include: 给出复制或强化的具体环节。
+    exclude: 只描述现象长期存在。
+    example: （虚构）一次成功的「材料达标」成为下一轮检查的默认模板。
+  - code: MECH-TRANSLATE
+    family: MECH
+    label: 转译/再定义
+    definition: 上级目标在向下传递中被重新定义、分解或替换。
+    include: 追踪目标在各层级的表述与执行差异。
+    exclude: 只说「层层加码」而不展示转译过程。
+    example: （虚构）「减负」在区一级被转译为「减少纸质材料」。
+  - code: MECH-DIFFUSION
+    family: MECH
+    label: 扩散渠道
+    definition: 学习、竞争、模仿、强制或纵向干预等渠道解释政策的传播。
+    include: 区分至少两种渠道并给出可观察差异。
+    exclude: 只报告采纳数量随时间增长。
+    example: （虚构）上级「示范点」推介与邻近城市竞争分别推动采纳。
+  - code: MECH-KNOWLEDGE
+    family: MECH
+    label: 知识/专家渠道
+    definition: 专家、智库或知识资源的进入路径与位置影响议程与政策选择。
+    include: 说明知识经由何种组织位置与渠道进入决策。
+    exclude: 只说「专家参与越多越好」。
+    example: （虚构）拥有内部渠道的专家更可能影响议程设置而非方案选择。
+  - code: MECH-CAPACITY
+    family: MECH
+    label: 能力约束
+    definition: 组织、财政、信息或人员能力的约束决定政策能否转化为实际效果。
+    include: 区分「形式上实施」与「具备实施能力」。
+    exclude: 只说「能力不足」。
+    example: （虚构）核心预算机构缺乏审核能力，预算改革停留在表格层面。
+  - code: MECH-SEQUENCE
+    family: MECH
+    label: 次序与前提
+    definition: 改革或政策效果依赖特定前提与先后次序。
+    include: 说明为何必须先有 A 才能有效推进 B。
+    exclude: 只是列出多项措施。
+    example: （虚构）没有统一的支出分类，绩效预算无法落地。
+  - code: MECH-FEEDBACK
+    family: MECH
+    label: 反馈与学习
+    definition: 结果通过反馈、学习或政策评估回到下一轮决策。
+    include: 给出反馈回路的具体环节。
+    exclude: 只在结论里说「需要持续优化」。
+    example: （虚构）试点评估结果改变了下一轮推广的范围。
+  - code: MECH-HISTORICAL
+    family: MECH
+    label: 历史制度/路径依赖
+    definition: 长时段的制度遗产或关键节点塑造当前的治理形态。
+    include: 给出关键节点与后续的自我强化过程。
+    exclude: 只是交代历史背景。
+    example: （虚构）早期人事制度的分层安排塑造了今天的职业流动结构。
+
+  # ---------------------------------------------------------------- EVI
+  - code: EVI-PROCESS-TRACING
+    family: EVI
+    label: 过程追踪
+    definition: 在单个或少数案例内部追踪机制各环节的证据。
+    include: 按机制环节组织证据，并讨论证据对竞争解释的区分力。
+    exclude: 按时间顺序讲故事。
+    example: （虚构）逐环节呈现从文件下发到基层应对的证据链。
+  - code: EVI-COMPARATIVE
+    family: EVI
+    label: 比较案例
+    definition: 通过最相似、最差异或受控比较来识别关键条件。
+    include: 说明案例如何被选出以及比较控制了什么。
+    exclude: 多个案例平行描述、无比较逻辑。
+    example: （虚构）选取条件相近但结果相反的两个区进行比较。
+  - code: EVI-HISTORICAL
+    family: EVI
+    label: 历史/档案
+    definition: 以档案、史料、地方志等长时段材料为主要证据。
+    include: 材料来源与时间跨度清楚。
+    exclude: 只引用二手历史叙述作为背景。
+    example: （虚构）用多个朝代的职官资料检验一个人事制度命题。
+  - code: EVI-FIELDWORK
+    family: EVI
+    label: 田野/访谈
+    definition: 以参与观察、深度访谈等一手田野材料为主要证据。
+    include: 说明田野时间、对象覆盖与资料编号方式。
+    exclude: 只有「笔者调研发现」而无可追溯资料。
+    example: （虚构）对市、区、街道三级工作人员进行半结构访谈。
+  - code: EVI-DOCUMENT
+    family: EVI
+    label: 政策文本/内部文件
+    definition: 以政策文件、会议纪要、内部通报等文本为证据。
+    include: 文本来源、数量与分析方法清楚。
+    exclude: 只引用文件标题作为背景。
+    example: （虚构）分析某市三年内的全部考核通报。
+  - code: EVI-STYLIZED
+    family: EVI
+    label: 典型事实归纳
+    definition: 汇总多领域已知事实或既有研究发现，作为概念或理论的经验支撑。
+    include: 列出多类典型事实并逐一与概念对应。
+    exclude: 零散举例。
+    example: （虚构）用财政、环保、信访三个领域的已知事实支撑一个概念。
+  - code: EVI-EHA
+    family: EVI
+    label: 事件史/扩散数据
+    definition: 以采纳时间数据和事件史方法分析政策创新与扩散。
+    include: 有采纳时间、风险集与时间依赖的处理。
+    exclude: 只画采纳累计曲线。
+    example: （虚构）以城市—年份数据分析一项改革的采纳时点。
+  - code: EVI-PANEL
+    family: EVI
+    label: 面板/准实验
+    definition: 用面板数据与双重差分、断点、工具变量等准实验设计估计效应。
+    include: 说明识别假设及其检验。
+    exclude: 横截面回归。
+    example: （虚构）以试点批次的时间差异估计政策效应。
+  - code: EVI-SURVEY
+    family: EVI
+    label: 问卷调查
+    definition: 以问卷调查数据测量态度、行为或组织特征。
+    include: 抽样与测量方式清楚。
+    exclude: 只引用他人调查的一个百分比。
+    example: （虚构）对基层公务员进行分层抽样调查。
+  - code: EVI-EXPERIMENT
+    family: EVI
+    label: 实验
+    definition: 用调查实验、田野实验或实验室实验识别因果效应。
+    include: 有随机分配与操控检验。
+    exclude: 自然实验（归入 EVI-PANEL）。
+    example: （虚构）在问卷中随机呈现不同问责情境。
+  - code: EVI-TEXT-AS-DATA
+    family: EVI
+    label: 计算文本分析
+    definition: 用大规模文本的计算方法（主题模型、词典、嵌入、大模型标注等）测量构念。
+    include: 有效度检验（人工标注对照等）。
+    exclude: 词频统计作为背景描述。
+    example: （虚构）用人工校验过的分类器标注十万条政务留言。
+  - code: EVI-FORMAL-MODEL
+    family: EVI
+    label: 形式模型
+    definition: 用博弈论或数理模型推导命题。
+    include: 有明确的假设、均衡与命题。
+    exclude: 只画示意图。
+    example: （虚构）建立上下级监督博弈并推出变通执行的均衡条件。
+  - code: EVI-RIVAL-TEST
+    family: EVI
+    label: 竞争解释检验
+    definition: 显式检验或排除至少一个竞争解释。
+    include: 给出竞争解释的可观察含义并与材料对照。
+    exclude: 只在讨论部分提一句「也可能有其他因素」。
+    example: （虚构）检验「官员能力」解释是否能说明同样的差异。
+  - code: EVI-SECONDARY
+    family: EVI
+    label: 二手研究综合
+    definition: 以既有研究与二手资料为主要证据基础。
+    include: 综述或理论文中系统利用二手文献。
+    exclude: 常规文献回顾。
+    example: （虚构）系统整合既有案例研究来检验一个命题。
+
+  # ---------------------------------------------------------------- CTR
+  - code: CTR-BOUNDARY
+    family: CTR
+    label: 边界修正
+    definition: 指出既有理论机制只在某些条件下成立。
+    include: 条件被明确写出且可检验。
+    exclude: 只说「丰富了理论」。
+    example: （虚构）说明某激励机制只在上级可核查时成立。
+  - code: CTR-RELATION
+    family: CTR
+    label: 关系/参数改变
+    definition: 同一机制的方向或强度因制度条件而改变。
+    include: 指出被改变的关系与导致改变的条件。
+    exclude: 只报告系数大小不同。
+    example: （虚构）在强纵向控制下，竞争对扩散的作用由正转弱。
+  - code: CTR-MECHANISM
+    family: CTR
+    label: 新增/替换机制
+    definition: 提出既有理论未包含的关键机制，或替换原有机制。
+    include: 新机制有独立的可观察含义。
+    exclude: 新机制只是旧机制换名。
+    example: （虚构）提出「可见性竞争」解释基层的资源配置。
+  - code: CTR-CONCEPT
+    family: CTR
+    label: 概念贡献
+    definition: 提出新概念或重构既有概念，并展示其解释收益。
+    include: 概念有边界、维度与推论。
+    exclude: 只有新名词。
+    example: （虚构）提出一个中层概念统一解释多类现象。
+  - code: CTR-UNIFY
+    family: CTR
+    label: 统一解释
+    definition: 用一个框架统合多种过去分散的解释或现象。
+    include: 明确被统合的对象。
+    exclude: 框架只覆盖本文案例。
+    example: （虚构）以一个维度框架统合三种既有治理模式解释。
+  - code: CTR-GENERALIZE
+    family: CTR
+    label: 一般化命题
+    definition: 把中国经验上升为可在其他情境检验的一般命题。
+    include: 命题以「在条件 C 下」表述，而非「中国特有」。
+    exclude: 例外论式的「中国特色」结论。
+    example: （虚构）提出「多重问责并存时，行动者以可见性最高的问责为准」。
+  - code: CTR-AGENDA
+    family: CTR
+    label: 研究议程/学科反思
+    definition: 重组领域问题或提出新的研究议程。
+    include: 议程具体到可执行的问题与方法。
+    exclude: 只说「未来研究可以进一步深入」。
+    example: （虚构）提出以「实践本位」重组公共管理研究问题的三个方向。
+  - code: CTR-POLICY-COND
+    family: CTR
+    label: 条件化政策含义
+    definition: 政策建议由已识别的机制推出，并附带适用条件。
+    include: 每条建议对应一个机制环节与一个前提。
+    exclude: 「加强顶层设计」式的通用对策。
+    example: （虚构）只有当上级可核查过程时，过程留痕才可能减负。
+  - code: CTR-METHOD
+    family: CTR
+    label: 方法推进
+    definition: 新方法或新数据使过去不可观测的机制首次可检验。
+    include: 说明方法让哪个机制首次可观测。
+    exclude: 「使用了新方法」本身。
+    example: （虚构）用工单全量数据首次观察到回应策略的日内分配。
+
+  # ---------------------------------------------------------------- NRM
+  - code: NRM-IS-OUGHT
+    family: NRM
+    label: 应然实然分离
+    definition: 明确区分规范目标与经验现实，并分别论证。
+    include: 文中显式区分两类命题。
+    exclude: 只在结论里提出建议。
+    example: （虚构）先评估现行预算制度实际做到了什么，再讨论应当做什么。
+  - code: NRM-GOAL-COND-SEQ
+    family: NRM
+    label: 目标—条件—次序
+    definition: 把改革拆成目标、实现条件与推进次序，区分近期与远期目标。
+    include: 给出目标排序与前提条件。
+    exclude: 一次性列出全部改革目标。
+    example: （虚构）先建立统一核算，再推进绩效评价，最后引入公开问责。
+  - code: NRM-CAPACITY-AUDIT
+    family: NRM
+    label: 改革能力评估
+    definition: 评估制度或组织是否具备实现改革目标的能力与前提。
+    include: 区分「制度文本存在」与「制度能力具备」。
+    exclude: 以文件出台作为改革成功的证据。
+    example: （虚构）检查核心机构是否真正掌握审核与否决能力。
+  - code: NRM-MECH-TO-REMEDY
+    family: NRM
+    label: 由机制推对策
+    definition: 对策逐条对应已识别的阻滞或失灵机制，说明作用环节。
+    include: 每条对策都能回指一个机制环节。
+    exclude: 与分析脱节的通用对策清单。
+    example: （虚构）针对「监督虚化」环节提出可核查的抽检设计。

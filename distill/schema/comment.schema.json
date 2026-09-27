@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Lam810/PublicAdmin-Supervisor-Skills-CN/distill/schema/comment.schema.json",
+  "title": "Supervisor comment record (one JSON object per line)",
+  "description": "Route B of the distillation protocol: a supervisor's margin comment on a draft, coded with defect codes (vocab/defects.yaml) and/or research-move codes (vocab/research-moves.yaml). Advisor and draft identifiers must be pseudonymous.",
+  "type": "object",
+  "required": ["comment_id", "advisor", "draft_id", "comment_text", "defect_codes", "generalizable"],
+  "additionalProperties": false,
+  "properties": {
+    "comment_id": {"type": "string"},
+    "advisor": {"type": "string", "description": "pseudonym, e.g. ADV-A"},
+    "draft_id": {"type": "string", "description": "pseudonym, e.g. D2025-03"},
+    "section": {"type": "string", "description": "e.g. 引言 / 文献回顾 / 研究设计 / 案例分析 / 结论"},
+    "original_text": {"type": "string", "description": "the commented passage (may be shortened)"},
+    "comment_text": {"type": "string"},
+    "defect_codes": {"type": "array", "items": {"type": "string", "pattern": "^[QLCMETNP][0-9]$"}},
+    "move_codes": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z]+-[A-Z0-9-]+$"}},
+    "action": {"type": "string", "description": "what the supervisor asked the author to do, as an imperative"},
+    "generalizable": {"type": "boolean", "description": "true if the comment states a reusable judgement rather than a draft-specific fix"},
+    "coder": {"type": "string"}
+  }
+}
