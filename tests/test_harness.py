@@ -225,6 +225,13 @@ class AggregateTests(unittest.TestCase):
         self.assertTrue(sup["rules"]["SH-X"]["pass"])
         self.assertTrue(sup["rules"]["CE-X"]["pass"])
 
+    def test_candidate_source_hit_rate(self):
+        reg = _registry()
+        reg["rules"][1]["candidate_sources"] = ["A0", "A1", "B0", "A9"]  # A9 is held out, B0 does not support
+        sup = aggregate.compute_support(self.records(), reg)
+        self.assertEqual(sup["rules"]["IL-X"]["candidate_hits"], ["A0", "A1"])
+        self.assertEqual(sup["rules"]["IL-X"]["candidate_annotated"], 3)
+
     def test_unsupported_rule_is_suggested_for_rejection_only_with_enough_data(self):
         sup = aggregate.compute_support(self.records(), _registry())
         self.assertEqual(sup["rules"]["IL-Y"]["suggestion"], "rejected")

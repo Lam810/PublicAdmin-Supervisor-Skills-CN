@@ -133,6 +133,12 @@ def compute_support(records: list[Record], registry: dict[str, Any], *, allow_un
                           "periods": periods, "n_tradition_annotated": n_annotated,
                           "n_other_support": len(s_out), "n_other_annotated": len(outside),
                           "lift": None if lift is None else round(lift, 3)})
+        cand = set(rule.get("candidate_sources") or [])
+        if cand:
+            annotated_ids = {r.paper_id for r in train}
+            support_ids = set(entry["support_papers"])
+            entry["candidate_annotated"] = len(cand & annotated_ids)
+            entry["candidate_hits"] = sorted(cand & support_ids)
         passed = not reasons
         if passed:
             suggestion = "candidate" if rule["status"] == "seed" else rule["status"]
@@ -174,13 +180,14 @@ def support_report(sup: dict[str, Any]) -> str:
         "",
         "机器只计数与建议；状态变更须人工在 rules/registry.yaml 中完成（见 rules/README.md）。",
         "",
-        "| 规则 | 镜头 | 当前状态 | 支持 | 时期 | lift/覆盖率 | 通过 | 建议 | 未通过原因 |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| 规则 | 镜头 | 当前状态 | 支持 | 时期 | lift/覆盖率 | 预测命中 | 通过 | 建议 | 未通过原因 |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for rid, e in sup["rules"].items():
         metric = e.get("lift") if e["layer"] != "shared" else e.get("share")
+        hit = f"{len(e['candidate_hits'])}/{e['candidate_annotated']}" if "candidate_hits" in e else "—"
         lines.append(f"| {rid} | {e['lens']} | {e['status']} | {e['n_support']} | {len(e['periods'])} | "
-                     f"{'—' if metric is None else metric} | {'是' if e['pass'] else '否'} | {e['suggestion']} | "
+                     f"{'—' if metric is None else metric} | {hit} | {'是' if e['pass'] else '否'} | {e['suggestion']} | "
                      f"{'；'.join(e['reasons']) or '—'} |")
     keys = sorted(sup["per_scholar_train"])
     if sup["code_matrix"]:

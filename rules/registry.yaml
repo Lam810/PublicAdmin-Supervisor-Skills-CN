@@ -15,6 +15,8 @@
 # candidate_sources：预先登记「预期能在哪些论文里找到这条规则」（paper_id 见 corpus/papers.csv）。
 #   这是一份可被证伪的预测：全文标注后，没有出现就不算支持。
 #   用于形成种子规则的论文（seed_source=true）一律不进入留出集。
+#   2026-09-27 在任何全文标注之前按题名登记（只用训练集论文）；共享规则 SH 预期普遍出现，不单列。
+#   aggregate 会报告预测命中率，用于评估「按题名形成种子规则」本身的准确度。
 
 version: "0.2.0"
 
@@ -225,7 +227,7 @@ rules:
     check: 能写出「要求 A × 要求 B → 策略 S」，且 S 在多个地区或时期重复出现。
     anti_pattern: 「压力大 → 基层变形」式的单箭头解释。
     requires: ["PZ-PERSISTENCE|PZ-ANOMALY|PZ-COEXIST", "MECH-TENSION"]
-    candidate_sources: []
+    candidate_sources: [ZXG-2008-01, ZXG-2011-02, ZXG-2012-02, ZXG-2011-01, ZXG-2005-02]
   - id: IL-02
     lens: IL
     layer: archetype
@@ -235,7 +237,7 @@ rules:
     check: 至少有一个具体的再生产环节得到材料支持。
     anti_pattern: 只说现象「长期存在」。
     requires: ["MECH-STABILIZE"]
-    candidate_sources: []
+    candidate_sources: [ZXG-2008-01, ZXG-2012-02, ZXG-2016-01, ZXG-2019-02]
   - id: IL-03
     lens: IL
     layer: archetype
@@ -245,7 +247,7 @@ rules:
     check: 能写出该逻辑在何种条件下带来有效治理。
     anti_pattern: 只挑失败案例来证明一个结构性解释。
     requires: ["PZ-COEXIST|PZ-VARIATION", "MECH-TENSION|MECH-CONTROL"]
-    candidate_sources: []
+    candidate_sources: [ZXG-2011-02, ZXG-2012-02, ZXG-2010-01]
   - id: IL-04
     lens: IL
     layer: archetype
@@ -255,7 +257,7 @@ rules:
     check: 能指出每一种控制权归属于哪一层级。
     anti_pattern: 「中央集权导致……」式的整体判断。
     requires: ["MECH-CONTROL", "CON-DIMENSION|CON-TYPOLOGY"]
-    candidate_sources: []
+    candidate_sources: [ZXG-2012-01, ZXG-2015-01, ZXG-2011-01]
   - id: IL-05
     lens: IL
     layer: archetype
@@ -265,7 +267,7 @@ rules:
     check: 给出历史材料与当代现象之间的具体对应。
     anti_pattern: 只在引言交代历史背景。
     requires: ["MECH-HISTORICAL", "EVI-HISTORICAL"]
-    candidate_sources: []
+    candidate_sources: [ZXG-2016-01, ZXG-2019-01, ZXG-2019-02, ZXG-2013-01]
 
   # ================================================================ CE 概念工程
   - id: CE-01
@@ -277,7 +279,7 @@ rules:
     check: 比较表完整；删掉概念名称后，维度上的差异依然成立。
     anti_pattern: 只给概念定义。
     requires: ["CON-IDEALTYPE|CON-DIMENSION", "CON-CONTRAST"]
-    candidate_sources: []
+    candidate_sources: [ZLA-2014-03, ZLA-2016-01, ZLA-2022-03, ZLA-2014-01]
   - id: CE-02
     lens: CE
     layer: archetype
@@ -287,7 +289,7 @@ rules:
     check: 至少三条命题，每条对应一类现象。
     anti_pattern: 概念只解释本文的一个案例。
     requires: ["CON-UNIFY|CTR-UNIFY", "EVI-STYLIZED|EVI-SECONDARY"]
-    candidate_sources: []
+    candidate_sources: [ZLA-2014-03, ZLA-2018-01, ZLA-2021-02]
   - id: CE-03
     lens: CE
     layer: archetype
@@ -297,7 +299,7 @@ rules:
     check: 至少两个案例在关键维度上取值不同，且结果随之不同。
     anti_pattern: 维度只用来描述，不用来解释差异。
     requires: ["CON-DIMENSION", "PZ-VARIATION|GAP-VARIATION"]
-    candidate_sources: []
+    candidate_sources: [ZLA-2014-03, ZLA-2016-01, ZLA-2020-01]
   - id: CE-04
     lens: CE
     layer: archetype
@@ -307,7 +309,7 @@ rules:
     check: 激励关系有明确的可观察含义与数据检验。
     anti_pattern: 用「激励扭曲」一词概括所有行为。
     requires: ["MECH-INCENTIVE", "EVI-PANEL|EVI-SURVEY|EVI-FORMAL-MODEL"]
-    candidate_sources: []
+    candidate_sources: [ZLA-2007-01, ZLA-2004-01, ZLA-2011-01, ZLA-2015-01, ZLA-2018-02]
 
   # ================================================================ GT 多目标治理
   - id: GT-01
@@ -361,7 +363,7 @@ rules:
     check: 至少一条关系有对应的数据检验。
     anti_pattern: 用政策演进的时间线代替解释。
     requires: ["MECH-DIFFUSION|MECH-KNOWLEDGE", "EVI-EHA|EVI-SURVEY|EVI-PANEL"]
-    candidate_sources: []
+    candidate_sources: [ZXF-2015-01, ZXF-2016-01, ZXF-2008-02]
   - id: PP-02
     lens: PP
     layer: archetype
@@ -371,7 +373,7 @@ rules:
     check: 两类渠道各有一条可观察含义，且可在数据中分开。
     anti_pattern: 只报告采纳数量随时间增长。
     requires: ["MECH-DIFFUSION", "EVI-EHA"]
-    candidate_sources: []
+    candidate_sources: [ZXF-2015-01, ZXF-2016-01, ZXF-2014-01]
   - id: PP-03
     lens: PP
     layer: archetype
@@ -381,7 +383,7 @@ rules:
     check: 渠道与政策阶段都被明确界定。
     anti_pattern: 笼统地说「专家参与越多越好」。
     requires: ["MECH-KNOWLEDGE"]
-    candidate_sources: []
+    candidate_sources: [ZXF-2008-02, ZXF-2025-01, ZXF-2006-01, ZXF-2008-01]
   - id: PP-04
     lens: PP
     layer: archetype
@@ -391,7 +393,7 @@ rules:
     check: 制度条件在分析中有取值变化或明确的作用路径。
     anti_pattern: 在引言写一段国情介绍后不再出现。
     requires: ["GAP-CONDITION|PZ-MISFIT", "CTR-BOUNDARY|CTR-RELATION"]
-    candidate_sources: []
+    candidate_sources: [ZXF-2016-01, ZXF-2015-01, ZXF-2025-01]
   - id: PP-05
     lens: PP
     layer: archetype
@@ -401,7 +403,7 @@ rules:
     check: 命题或议程可以在其他国家或地区检验。
     anti_pattern: 以「中国特色」为终点。
     requires: ["CTR-GENERALIZE|CTR-AGENDA"]
-    candidate_sources: []
+    candidate_sources: [ZXF-2025-01, ZXF-2014-01]
 
   # ================================================================ RS 改革次序
   - id: RS-01
@@ -413,7 +415,7 @@ rules:
     check: 目标有排序，每个目标写明实现前提。
     anti_pattern: 一次性列出全部理想目标。
     requires: ["NRM-GOAL-COND-SEQ"]
-    candidate_sources: []
+    candidate_sources: [MJ-2005-01, MJ-2005-05, MJ-2004-03]
   - id: RS-02
     lens: RS
     layer: archetype
@@ -423,7 +425,7 @@ rules:
     check: 有材料直接观察到制度能力，而不只是制度文本。
     anti_pattern: 以文件出台或机构设立作为改革成功的证据。
     requires: ["NRM-CAPACITY-AUDIT|MECH-CAPACITY", "EVI-FIELDWORK|EVI-DOCUMENT"]
-    candidate_sources: []
+    candidate_sources: [MJ-2007-02, MJ-2005-03, MJ-2012-01]
   - id: RS-03
     lens: RS
     layer: archetype
@@ -433,7 +435,7 @@ rules:
     check: 三类原因各有证据判断。
     anti_pattern: 直接归因为「执行不力」。
     requires: ["MECH-CAPACITY|MECH-SEQUENCE", "EVI-RIVAL-TEST"]
-    candidate_sources: []
+    candidate_sources: [MJ-2005-03, MJ-2007-03, MJ-2007-02]
   - id: RS-04
     lens: RS
     layer: archetype
@@ -443,7 +445,7 @@ rules:
     check: 每条建议写明前提条件与先后关系。
     anti_pattern: 与分析脱节的通用对策清单。
     requires: ["CTR-POLICY-COND|NRM-MECH-TO-REMEDY"]
-    candidate_sources: []
+    candidate_sources: [MJ-2005-01, MJ-2005-05, MJ-2006-01]
   - id: RS-05
     lens: RS
     layer: archetype
@@ -453,7 +455,7 @@ rules:
     check: 预算过程中的具体权力或程序被用作证据。
     anti_pattern: 把预算当作纯技术性的会计问题。
     requires: ["MECH-CAPACITY|MECH-CONTROL", "CTR-GENERALIZE|CTR-BOUNDARY"]
-    candidate_sources: []
+    candidate_sources: [MJ-2008-01, MJ-2011-01, MJ-2012-03, MJ-2012-02]
 
   # ================================================================ TA 理论适用
   - id: TA-01
@@ -465,7 +467,7 @@ rules:
     check: 有一张「前提—原情境—本情境—机制后果」对照表。
     anti_pattern: 「西方理论不适合中国」。
     requires: ["PZ-MISFIT|GAP-CONDITION"]
-    candidate_sources: []
+    candidate_sources: [YJX-2010-01, YJX-2022-02]
   - id: TA-02
     lens: TA
     layer: archetype
@@ -475,7 +477,7 @@ rules:
     check: 结构条件与行动者选择都有经验指向。
     anti_pattern: 只看制度结构，或只看个别行动者。
     requires: ["PZ-MISFIT|GAP-CONDITION", "CTR-BOUNDARY|CTR-RELATION"]
-    candidate_sources: []
+    candidate_sources: [YJX-2010-01, YJX-2019-02]
   - id: TA-03
     lens: TA
     layer: archetype
@@ -485,7 +487,7 @@ rules:
     check: 新旧范式在目标、工具、关系三方面各有对照。
     anti_pattern: 用「新范式」包装单项工具的变化。
     requires: ["PZ-SHIFT", "CON-RECONSTRUCT|CON-TYPOLOGY|CTR-CONCEPT"]
-    candidate_sources: []
+    candidate_sources: [YJX-2023-01, YJX-2019-02, YJX-2022-01]
   - id: TA-04
     lens: TA
     layer: archetype
@@ -495,7 +497,7 @@ rules:
     check: 框架能判定至少一个反例不属于它。
     anti_pattern: 框架能套用于一切现象。
     requires: ["CON-DIMENSION|CON-IDEALTYPE", "field:boundary_conditions"]
-    candidate_sources: []
+    candidate_sources: [YJX-2012-02, YJX-2020-01, YJX-2019-01]
 
   # ================================================================ PI 执行博弈
   - id: PI-01
@@ -507,7 +509,7 @@ rules:
     check: 利益表覆盖所有关键行动者，并写明各自的应对能力。
     anti_pattern: 把偏差归咎于执行者素质或「认识不到位」。
     requires: ["MECH-INTEREST"]
-    candidate_sources: []
+    candidate_sources: [DH-2002-01, DH-2004-01, DH-2010-04, DH-2024-01]
   - id: PI-02
     lens: PI
     layer: archetype
@@ -517,7 +519,7 @@ rules:
     check: 类型有明确判别标准，且不同类型对应不同解释。
     anti_pattern: 用一个「执行不力」涵盖所有偏差。
     requires: ["CON-TYPOLOGY|CON-DIMENSION", "PZ-ANOMALY|PZ-PERSISTENCE|PZ-VARIATION"]
-    candidate_sources: []
+    candidate_sources: [DH-2002-01, DH-2024-01, DH-2023-01]
   - id: PI-03
     lens: PI
     layer: archetype
@@ -527,7 +529,7 @@ rules:
     check: 均衡条件被写出，并与材料中的可观察情形对应。
     anti_pattern: 只在修辞上使用「博弈」一词。
     requires: ["MECH-GAME", "MECH-INFO|MECH-INCENTIVE"]
-    candidate_sources: []
+    candidate_sources: [DH-2004-01, DH-2010-04, DH-2025-01, DH-2024-03]
   - id: PI-04
     lens: PI
     layer: archetype
@@ -537,7 +539,7 @@ rules:
     check: 行为层与制度层各有证据，且二者的互动被写出。
     anti_pattern: 只谈制度缺陷，或只谈个人动机。
     requires: ["MECH-INTEREST|MECH-GAME", "MECH-CONTROL|MECH-INCENTIVE|MECH-INFO"]
-    candidate_sources: []
+    candidate_sources: [DH-2002-01, DH-2010-03, DH-2010-04]
   - id: PI-05
     lens: PI
     layer: archetype
@@ -547,7 +549,7 @@ rules:
     check: 每条对策能回指一个阻滞环节。
     anti_pattern: 「加强监督、完善制度、提高认识」式的通用对策。
     requires: ["NRM-MECH-TO-REMEDY"]
-    candidate_sources: []
+    candidate_sources: [DH-2002-01, DH-2010-03, DH-2024-01]
   - id: PI-06
     lens: PI
     layer: archetype
@@ -557,4 +559,4 @@ rules:
     check: 写明理论原初问题与当前问题的异同。
     anti_pattern: 只摘取理论的结论性表述。
     requires: ["CON-GENEALOGY"]
-    candidate_sources: []
+    candidate_sources: [DH-2003-02, DH-2003-01, DH-2023-01]
