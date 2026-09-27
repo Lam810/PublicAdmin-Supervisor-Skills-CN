@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install pyyaml jsonschema
+      - name: Skill structure lint
+        run: python scripts/lint_skills.py
+      - name: Shared and generated references in sync
+        run: python scripts/build_refs.py --check
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v

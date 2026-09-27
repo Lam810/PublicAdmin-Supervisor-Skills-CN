@@ -24,6 +24,12 @@ statuses:
   validated: 通过准入门槛，且在留出集上带来可测的改进（见 eval/prereg.md）。
   rejected: 标注篇数已足够但支持度不足，或留出验证失败；保留记录，不再进入 Skill。
 
+build:
+  # scripts/build_refs.py 只把这些状态的规则渲染进 skills/（运行时知识）。
+  # seed / candidate 留在研究区：rules/preview/lens-cards-preview.md；rejected 永不渲染。
+  runtime_statuses: [validated]
+  preview_statuses: [seed, candidate, validated]
+
 admission:
   min_papers: 3            # 至少 3 篇不同论文（训练集）出现
   min_periods: 2           # 至少跨 2 个时期

@@ -1,5 +1,7 @@
 # Scholar-to-Skill Distillation Protocol
 
+> **v0.2 说明**：本章是方法原则。可执行的命令、门槛与判据以这三处为准：`distill/README.md`（流水线）、`rules/registry.yaml`（准入门槛 `admission` 与运行时状态 `build`）、`eval/prereg.md`（留出验证与盲评判据）。
+
 目标不是总结“某学者说过什么”，而是识别他/她在不同论文中**反复执行的研究动作**，再把稳定动作转成 Agent 可执行规则。
 
 ## 1. Corpus sampling
@@ -13,13 +15,14 @@
 - 理论/概念文、定量文、案例文分别抽样；
 - 不要只抽“最出名的三篇”，否则会把单篇技巧误认成稳定风格。
 
-### MVP 六组
+### 七组研究传统（v0.2）
 - 周雪光：制度逻辑、官僚组织、运动型治理、控制权、历史制度分析；
 - 周黎安：行政发包、官员激励、地方政府行为、制度比较；
 - 何艳玲：城市/地方治理、行政体制改革、大国有效治理、自主知识体系；
 - 朱旭峰：政策过程、专家知识、政策扩散、政策创新、实验/调查；
 - 马骏：公共预算、财政制度、问责、改革能力；
-- 郁建兴：治理理论、国家—社会关系、社会治理、精准治理、数字治理。
+- 郁建兴：治理理论、国家—社会关系、社会治理、精准治理、数字治理；
+- 丁煌：政策执行、利益分析与执行阻滞、博弈模型、行政学说史。
 
 ## 2. Per-paper annotation schema
 
@@ -113,45 +116,30 @@ recurring_research_moves:
 再与留出论文实际结构比较。
 
 ### Task B — Revision utility
-准备 20 篇匿名公共管理草稿片段：
-- baseline LLM；
-- 通用学术写作 prompt；
-- 本 Skill。
-由公共管理博士生/教师盲评：
-1. 问题意识提升；
-2. 理论对话提升；
-3. 机制清晰度提升；
-4. 证据—结论匹配；
-5. 是否引入虚假/过度理论化。
+准备 30–50 段匿名公共管理稿件（作者书面同意），分别由 baseline（原生模型）、generic（通用学术写作提示词）、skill（本仓库）修改；
+≥3 名公共管理博士生/教师盲评 D1–D8：问题意识、理论对话、概念精确、机制清晰、证据匹配、贡献清晰、未过度理论化、事实可靠，并记录捏造条数。
+量表见 `eval/rubric.md`，成功判据（含两项危害维度与捏造率的非劣检验）见 `eval/prereg.md`。
 
 ### Task C — Attribution sanity
 把学者名字全部去掉，检查 Skill 的规则是否仍然有用。
 若去掉名字就失去价值，说明做的是“名人角色扮演”，不是知识蒸馏。
 
-## 7. Recommended repository growth
+## 7. 仓库中的对应位置
 
 ```text
-corpus/
-  metadata/
-  annotations/
-  heldout/
-references/
-  scholar-archetypes.md
-  evidence-rules.md
-skills/
-handbook/
-eval/
-  blind_revision_set/
-  rubric.md
-  results/
+corpus/papers.csv          书目登记（只有元数据）；fulltext/ annotations/ 被忽略
+vocab/                     研究动作编码本与缺陷编码
+rules/registry.yaml        规则唯一真源：触发、动作、检验、反模式、可计数定义、状态
+rules/support.json         机器计数结果（aggregate 生成）
+rules/preview/             研究区预览（含 seed/candidate 与来源传统，不被 Skill 加载）
+skills/*/references/       build_refs.py 生成：只含 runtime_statuses（默认 validated）的规则
+eval/                      预注册、盲评量表、盲评稿件规范
 ```
 
-## 8. Release criterion for v1.0
+## 8. v1.0 发布条件
 
-从 MVP 升到 v1.0 前至少做到：
-- 6 位学者 × 15 篇 = 90 篇人工/半自动结构标注；
-- 每条 archetype rule 有 ≥3 篇来源；
-- 20 篇 held-out 论文验证；
-- 20 个匿名稿件修改对照；
-- 关键引用可以回溯；
-- Skill 不依赖学者名字也能工作。
+- 7 位学者 × 至少 15 篇 = 105 篇全文结构标注，全部通过逐字核验，并抽样人工复核语义；
+- 各族编码一致性 κ ≥ 0.60（至少一名人类标注者）；
+- 每条进入 Skill 的规则状态为 validated，且有可回溯的支持论文；
+- Task A 与 Task B 按 `eval/prereg.md` 的判据报告，无论成败；
+- Skill 不依赖学者姓名也能工作（`scripts/lint_skills.py` 禁止 skills/ 中出现姓名）。

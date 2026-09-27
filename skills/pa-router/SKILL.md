@@ -1,40 +1,50 @@
 ---
 name: pa-router
-description: Route a Chinese public administration/public management research task to the right reasoning workflow based on the paper's actual contribution and method.
+description: Route Chinese public administration research by contribution type and current bottleneck. Use when 用户给出选题、摘要或草稿，要求判断论文类型、写作路线或下一步；明确的润色和单节写作直接使用对应技能。
+license: CC-BY-NC-SA-4.0
 ---
 
-# PA Research Router
+# 公共管理研究路由
 
-## Trigger
-用户给出选题、摘要、论文草稿或“这能不能写成公共管理论文”，需要先判断文章到底是什么类型。
+先识别用户当前要完成什么，再判断主贡献。不要把明确的局部编辑自动扩成全文审查。
+材料不全时先给暂定判断，说明哪项信息会改变路线，不要求用户填写整套问卷。
 
-## Goal
-不要立刻润色。先确认论文的**主贡献载体**，再决定后续分析。
+## 判断贡献载体
 
-## Classify into one primary type
+| 主类型 | 承重问题 |
+|---|---|
+| 制度逻辑／机制解释 | 哪个反复出现的现象需要解释，行为链能否被观察？ |
+| 概念／理论构造 | 新分类是否有边界、非例及比旧概念更强的解释力？ |
+| 政策过程／实证检验 | 估计对象是什么，设计能否区分竞争解释？ |
+| 改革／政策设计 | 目标、能力、约束、实施顺序如何连接？ |
+| 理论适用性 | 哪个制度条件改变理论的前提或机制？ |
+| 规范理论 | 价值前提、推理、反对意见及适用边界是否成立？ |
+| 综述／学科反思 | 检索范围、分类依据与知识重组是否可复查？ |
 
-1. **制度逻辑 / 机制解释**：解释一个稳定、反常或反复出现的治理现象。
-2. **概念 / 理论构造**：提出新概念、理想类型、分析框架或理论命题。
-3. **政策过程 / 实证检验**：行动者、信息、扩散、政策选择或执行机制，有明确变量和数据。
-4. **制度改革 / 政策设计**：讨论目标、条件、制度能力、改革顺序。
-5. **治理范式 / 理论适用性**：修正既有理论在中国情境中的机制或边界。
-6. **规范理论**：核心是价值、合法性、责任性、公正等规范论证。
-7. **综述 / 学科反思**：重组已有文献或提出研究议程。
+混合稿件选择一个主类型，必要时补一个次类型。规范论文不强制制造经验反常；综述不强制编造因果机制。
+需要拆解主论证时读 [论证链](references/argument-chain.md)。
 
-## Routing
-- 问题不清楚 → `pa-question-framer`
-- 概念或机制含糊 → `pa-concept-mechanism-builder`
-- 有明显“西方理论 + 中国案例” → `pa-theory-localizer`
-- Introduction 需要重写 → `pa-intro-drafter`
-- 全文已成形 → `pa-paper-reviewer`
-- 需要多角度会诊 → `pa-supervisor-panel`
+## 按瓶颈路由
 
-## Output
-只给：
-- Primary type
-- Secondary type（若有）
-- 当前论文真正的“承重梁”
-- 最大结构风险（最多 3 个）
-- 下一步应该调用哪个 Skill，以及原因
+| 当前任务 | 首选技能 |
+|---|---|
+| 从主题形成问题 | pa-question-framer |
+| 文献解释地图与引用核验 | pa-literature-mapper |
+| 概念边界、机制箭头 | pa-concept-mechanism-builder |
+| 情境与理论前提 | pa-theory-localizer |
+| 案例选择、过程追踪或识别 | pa-research-design |
+| 引言 | pa-intro-drafter |
+| 文献、理论、设计、分析、讨论等正文 | pa-section-writer |
+| 题目、摘要、关键词 | pa-title-abstract |
+| 语句和语体修改 | pa-prose-polisher |
+| 投稿前评审 | pa-paper-reviewer |
+| 多镜头诊断 | pa-supervisor-panel |
+| 期刊适配与投稿规范 | pa-journal-fit |
+| 退修计划与逐条回复 | pa-revision-responder |
+| 论文／批注蒸馏 | pa-scholar-distiller |
 
-不要把“数据很多”“用了新方法”自动判为贡献。
+这里只推荐最先解决的瓶颈及后续依赖，不依次调用全部技能。某技能未安装时，直接给该阶段的最小处理方案；不要声称已调用。
+
+## 交付
+
+给出主类型、承重判断、至多三个结构风险及首选下一步。区分已知事实、暂定判断、材料缺口；不凭题材新颖或数据量大判定贡献。

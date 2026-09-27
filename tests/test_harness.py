@@ -323,16 +323,21 @@ class BlindTests(unittest.TestCase):
                 for row in rows:
                     system = key[row["item_id"]][row["label"]]
                     base = 3 if system == "baseline" else 4
-                    for d in ("D1", "D2", "D3", "D4"):
+                    for d in ("D1", "D2", "D3", "D4", "D5", "D6"):
                         row[d] = str(base)
-                    row["D5"] = "4"
+                    row["D7"] = "4"
+                    row["D8"] = "4"
+                    row["fabrications"] = "0"
                 with open(sheet, "w", encoding="utf-8", newline="") as fh:
                     w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
                     w.writeheader()
                     w.writerows(rows)
             res = blind.score(tmp / "pk", baseline="baseline", margin=0.5, n_boot=500)
             self.assertAlmostEqual(res["vs_baseline"]["skill"]["D1"]["mean"], 1.0)
-            self.assertTrue(res["vs_baseline"]["skill"]["D5"]["noninferior"])
+            self.assertTrue(res["vs_baseline"]["skill"]["D7"]["noninferior"])
+            self.assertTrue(res["vs_baseline"]["skill"]["D8"]["noninferior"])
+            self.assertEqual(res["fabrication_rate"], {"baseline": 0.0, "skill": 0.0})
+            self.assertTrue(res["vs_baseline"]["skill"]["fabrication_rate"]["noninferior"])
             self.assertTrue((tmp / "pk" / "blind_report.md").exists())
 
 

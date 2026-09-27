@@ -1,72 +1,29 @@
 ---
 name: pa-concept-mechanism-builder
-description: Build or repair concepts and causal/process mechanisms for Chinese public administration papers, with observable implications and boundary conditions.
+description: Build concepts and observable process mechanisms for Chinese public administration research. Use when 用户提出新治理概念、机制框架、分析维度，或需要检验概念创新与机制链是否成立。
+license: CC-BY-NC-SA-4.0
 ---
 
-# PA Concept & Mechanism Builder
+# 概念与机制构造
 
-## Route A — Concept engineering
+按任务读取 [概念与机制检查卡](references/concept-mechanism.md)。只做需要的分支。
 
-Use when the paper proposes a term such as “X治理”“X式监管”“X型政府”。
+## 概念分支
 
-### Concept test
-1. **Object**：概念描述的是组织结构、治理关系、行动策略、过程还是结果？
-2. **Intension**：最少哪几个属性同时成立才算该概念？
-3. **Extension**：哪些案例属于，哪些明确不属于？
-4. **Neighbors**：至少选择 2 个最接近的既有概念比较。
-5. **Dimensions**：用 2–4 个维度比较，不允许只靠文字气质区分。
-6. **Explanatory payoff**：这个概念让哪些过去分散的现象得到统一解释？
-7. **Implications**：如果概念成立，现实中还应观察到什么？
+确定概念对象及层级，写最小必要属性，提供正例、非例、边界案例。
+用一致维度比较最接近的既有概念；核实它们的定义来源。
+区分理想类型与实际分类，必要属性与常见特征，描述性概念与规范评价。
+检验删除新名称后是否仍有新增解释；若只是旧概念换名，建议沿用旧概念或降为描述术语。
+不要为满足“创新”硬造概念。
 
-A new label without 4–7 is not a theoretical concept.
+## 机制分支
 
-## Route B — Mechanism construction
+把“制度条件 → 行动者目标／约束 → 策略 → 互动 → 中间过程 → 结果”写成可观察步骤，必要时加入反馈。
+逐条箭头记录逻辑理由、时间顺序、现有证据、最强替代机制及区分证据。
+不要把统计中介、受访者解释或过程先后单独当作因果机制已证实。
+结构张力是候选解释；只有材料支持才采用，不能把所有结果都解释成张力。
 
-### Minimum mechanism chain
-`Context/Institution → Actor constraints/goals → Strategy → Interaction → Intermediate process → Outcome`
+## 交付
 
-必要时增加 `Feedback/Stabilization`。
-
-### Mechanism audit
-对每条箭头问：
-- 谁在行动？
-- 为什么这种条件改变了他的选择集合或收益/责任结构？
-- 有什么材料能观察这一步？
-- 有没有另一条机制也能产生同样结果？
-
-### Structural-tension lens
-优先寻找：
-- 统一政策 vs 地方适配；
-- 强激励 vs 目标替代；
-- 上级控制 vs 基层信息优势；
-- 发展 vs 风险/秩序；
-- 形式责任 vs 实质能力；
-- 短期绩效 vs 长期制度化；
-- 技术可见性 vs 组织负担。
-
-不要硬套这些张力；只有材料支持时才能使用。
-
-## Output
-
-### Concept card
-- Proposed concept
-- Necessary attributes
-- Non-examples
-- Nearest concepts + dimensional differences
-- What it explains better
-- Observable implications
-
-### Mechanism card
-- Initial condition
-- Actors
-- Goals/constraints
-- Strategy
-- Interaction
-- Intermediate process
-- Outcome
-- Feedback
-- Boundary conditions
-- Observable evidence for each link
-- Strongest rival mechanism
-
-最后指出：目前最薄弱的一条箭头是什么，以及最便宜的补证据方式。
+概念卡／相邻概念比较表、机制链／箭头证据表、适用边界。
+最后指出最薄弱的箭头与最小补证据动作。未证实部分使用“推测”“待检验”，不补造访谈或案例。

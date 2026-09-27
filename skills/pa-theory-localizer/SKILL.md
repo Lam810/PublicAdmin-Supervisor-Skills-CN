@@ -1,58 +1,21 @@
 ---
 name: pa-theory-localizer
-description: Repair 'Western theory + China case' public-administration papers by identifying which assumptions, mechanisms, variables, or boundaries change in the Chinese institutional context.
+description: Specify how institutional conditions alter a theory's assumptions, mechanisms or scope. Use when 公共管理稿件声称中国情境拓展、西方理论不适用、本土理论创新，却没有清楚说明理论究竟改变什么。
+license: CC-BY-NC-SA-4.0
 ---
 
-# PA Theory Localizer
+# 理论适用性与本土化
 
-## Trigger
-稿件出现以下表达时优先调用：
-- “西方理论无法解释中国……”
-- “基于中国情境拓展……”
-- “丰富了 X 理论”
-- “构建中国特色……”
-但没有说明究竟改了理论什么。
+读 [理论修正矩阵](references/theory-matrix.md)。先还原原理论，再判断贡献，不能把一个被简化的理论当靶子。
 
-## Procedure
+1. 从用户提供或已核验的原始文献提取解释对象、机制、单位、前提和边界；区分作者明示与本研究推断。
+2. 把“中国情境”拆成制度条件：权责配置、干部责任、财政关系、组织边界、社会关系、政策试验或信息结构。记录可比较的差异。
+3. 判断属于边界修正、关系变化、机制增补／替代或概念重构；也允许结论为“现有理论已能解释”，没有必要强称创新。
+4. 检查差异是否来自测量、样本、研究层级或时期，提出最强竞争解释。
+5. 写成跨地区或时期可检验的条件命题，同时说明不可迁移部分。
 
-### 1. Reconstruct the imported theory
-只用已核验文献回答：
-- 核心因变量是什么？
-- 关键机制是什么？
-- 隐含制度前提是什么？
-- 适用层级与边界是什么？
+## 交付
 
-### 2. Translate “China context” into analytic conditions
-禁止只写“国情不同”。将情境转成可分析条件，例如：
-- 纵向政府关系；
-- 干部管理与责任结构；
-- 财政/行政权配置；
-- 组织边界；
-- 国家—社会关系；
-- 政策试验与扩散机制；
-- 数字平台带来的信息与控制结构。
-
-### 3. Decide what actually changes
-只允许四类贡献：
-A. **Boundary correction**：原机制只在条件 C 成立；
-B. **Parameter/relationship change**：同一机制方向或强度因制度条件改变；
-C. **Mechanism replacement/addition**：出现原理论没有的关键机制；
-D. **Concept reconstruction**：原概念本身无法容纳观察对象，需要重构。
-
-### 4. Avoid exceptionalism
-新解释应尽量写成“在何种制度条件下会怎样”，而不是“中国独一无二”。
-
-### 5. Produce a transportable claim
-最终贡献最好能被其他国家/地区/时期检验。
-
-## Output
-- Imported theory
-- Its necessary assumptions
-- Chinese institutional condition(s)
-- Which assumption is violated/modified
-- Contribution type A/B/C/D
-- Revised mechanism
-- Testable implication
-- Boundary condition
-- One sentence that is safe to write as theoretical contribution
-- One overclaim sentence that must NOT be written
+原理论及出处 → 条件变化 → 原预测／新预测 → 区分证据 → 修正类型与边界。
+给一条与证据强度匹配的贡献句及一条需要删弱的夸大句。
+资料缺失时输出论证模板和需要核验的文献，不把“丰富理论”当作已证实成果。

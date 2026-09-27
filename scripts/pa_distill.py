@@ -216,7 +216,7 @@ def cmd_blind_pack(a) -> int:
 
 def cmd_blind_score(a) -> int:
     from pa_lib.blind import score
-    res = score(Path(a.dir), a.baseline, a.margin, a.boot, a.seed)
+    res = score(Path(a.dir), a.baseline, a.margin, a.boot, a.seed, a.fab_margin)
     print((Path(a.dir) / "blind_report.md").read_text(encoding="utf-8"))
     return 0 if res else 1
 
@@ -321,7 +321,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("blind-score", help="Task B: unblind and score")
     p.add_argument("dir")
     p.add_argument("--baseline", required=True)
-    p.add_argument("--margin", type=float, default=0.5, help="non-inferiority margin on D5 (1-5 scale)")
+    p.add_argument("--margin", type=float, default=0.5, help="non-inferiority margin on the harm dimensions D7/D8 (1-5 scale)")
+    p.add_argument("--fab-margin", type=float, default=0.05, help="non-inferiority margin on the fabrication rate (proportion)")
     p.add_argument("--boot", type=int, default=5000)
     p.add_argument("--seed", type=int, default=0)
     p.set_defaults(func=cmd_blind_score)

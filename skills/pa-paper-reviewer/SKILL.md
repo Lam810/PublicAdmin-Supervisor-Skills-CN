@@ -1,74 +1,30 @@
 ---
 name: pa-paper-reviewer
-description: Review a Chinese public administration manuscript for problem consciousness, theoretical dialogue, concept quality, mechanism completeness, evidence fit, contribution, and Chinese academic prose.
+description: Review argument validity and evidence fit in Chinese public administration manuscripts. Use when 用户要求投稿前审稿、结构诊断、审稿人意见或判断论文问题、概念、机制、设计与贡献是否成立。
+license: CC-BY-NC-SA-4.0
 ---
 
-# PA Paper Reviewer
+# 投稿前结构审稿
 
-## Reviewer stance
-先审“文章成立不成立”，再审“写得顺不顺”。
+读 [缺陷编码](references/defect-codes.md) 与 [证据纪律](references/evidence-discipline.md)；
+需要重建论证时读 [论证链](references/argument-chain.md)。
 
-## Fatal checks
-出现任一项，先停止语言润色：
-1. 研究问题只是政策主题；
-2. 理论贡献等于“中国情境”；
-3. 新概念没有边界和相邻概念比较；
-4. 机制链关键箭头没有任何可观察证据；
-5. 数据设计无法回答论文声称的问题；
-6. 规范判断与经验发现混写；
-7. 结论强度明显超过证据。
+先说明本次实际审阅的范围。只有摘要不能判定全文缺少某项证据。
+识别论文主类型，规范研究评价值前提与反驳，综述评覆盖与综合依据，不能统一要求因果识别。
 
-## Six dimensions
-每项 0–5，仅用于诊断，不替代文字判断。
+## 诊断次序
 
-### A. Problem consciousness
-- 有清楚现象；
-- 有理论预期；
-- 有 mismatch；
-- RQ 不是预设答案。
+问题与文献对话 → 概念层级 → 机制或规范推理 → 证据／方法 → 贡献强度 → 表达。
+为每条问题提供原文位置或短摘录、缺陷编码、严重度、为什么影响核心主张、具体改法与验收条件。
+严重度按该文核心论证判断，编码默认值不是自动拒稿结论。
+分清“没有呈现”“尚未核验”“证据相反”，不把审稿人的猜测写成事实。
 
-### B. Literature dialogue
-- 文献按解释而非作者堆砌；
-- gap 精确；
-- 能说出竞争解释。
+## 交付
 
-### C. Conceptual precision
-- 核心概念边界清楚；
-- 层级一致；
-- 新概念有区分力。
+- 一句话复述文章最强的可辩护主张。
+- 至多三个最高优先级问题；没有致命问题时明确说没有发现。
+- 按问题、对话、概念、机制／推理、证据、贡献给出诊断；确需分数时标注仅用于修改。
+- 按依赖排序的修改计划：先修研究设计或主张，再修结构与语句。
+- 需补证据、需降格主张及可直接采用的小段示范。
 
-### D. Mechanism
-- 行动者清楚；
-- 每条箭头有逻辑；
-- 有可观察中间过程；
-- 有边界或反馈。
-
-### E. Evidence fit
-- 材料与问题同层级；
-- 识别/案例选择可解释；
-- 关键结论能追溯到证据；
-- rival explanations 有处理。
-
-### F. Contribution
-- 明确改变哪条已有认识；
-- 不把方法、场景、政策重要性冒充理论贡献；
-- 结论可在边界条件下迁移。
-
-## Chinese prose audit
-只在逻辑通过后做：
-- 删除空泛宏大句；
-- “通过……从而……进而……”链条若无证据，拆开；
-- 同段只承载一个中心判断；
-- 概念第一次出现即定义；
-- “机制、逻辑、路径、范式”四词不能互换；
-- 规范性“应然”与经验性“实然”分开。
-
-## Output
-1. One-sentence verdict on what the paper is actually about
-2. Top 3 fatal/major issues
-3. Six-dimension diagnostic
-4. Section-by-section surgery plan
-5. Claims that need stronger evidence
-6. Claims that should be weakened/deleted
-7. The smallest revision that could materially improve publishability
-8. If useful: rewritten thesis statement / RQ / contribution paragraph
+评论应指向稿件，不推断作者动机；不预测录用概率，不虚构期刊意见。
