@@ -123,6 +123,20 @@ class CorpusTests(unittest.TestCase):
         self.assertTrue(all(r["split"] == before[r["paper_id"]] for r in rows if r["paper_id"] in before))
         self.assertEqual(sum(r["split"] == "heldout" for r in rows), 3)
 
+    def test_fulltext_plan_puts_heldout_first_and_caps(self):
+        rows = []
+        for i in range(20):
+            rows.append({"paper_id": f"AAA-{2000 + i}-01", "scholar_key": "AAA", "title": f"t{i}", "journal": "j",
+                         "year": str(2000 + i), "issue": "1", "period": corpus.period_of(str(2000 + i)),
+                         "paper_type": ["theory", "case", "quant"][i % 3], "verify_status": "verified",
+                         "author_role": "sole", "seed_source": "1" if i == 7 else "0",
+                         "split": "heldout" if i in (3, 11, 17, 19) else "train", "oa_url": "", "fulltext": ""})
+        plan = corpus.fulltext_plan(rows, per_scholar=8)
+        self.assertEqual(len(plan), 8)
+        self.assertEqual([p["split"] for p in plan[:4]], ["heldout"] * 4)
+        self.assertEqual(plan[4]["paper_id"], "AAA-2007-01")  # seed source comes first among train papers
+        self.assertEqual(plan, corpus.fulltext_plan(rows, per_scholar=8))  # deterministic
+
     def test_parse_ris_and_endnote(self):
         ris = "TY  - JOUR\nAU  - 张三\nAU  - 李四\nTI  - 一个虚构的题名\nT2  - 虚构学报\nPY  - 2019\nIS  - 03\nSP  - 1\nEP  - 20\nER  - \n"
         recs = corpus.records_to_rows(corpus.parse_ris(ris), "ris", "ZS", "张三")

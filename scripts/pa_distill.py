@@ -69,6 +69,25 @@ def cmd_status(a) -> int:
     return 0
 
 
+def cmd_plan(a) -> int:
+    import csv as _csv
+    from pa_lib.corpus import fulltext_plan
+    plan = fulltext_plan(read_papers(), per_scholar=a.per_scholar)
+    out = Path(a.out)
+    with open(out, "w", encoding="utf-8", newline="") as fh:
+        w = _csv.DictWriter(fh, fieldnames=list(plan[0].keys()) if plan else ["paper_id"], lineterminator="\n")
+        w.writeheader()
+        w.writerows(plan)
+    from collections import Counter as _C
+    n = _C(p["scholar_key"] for p in plan)
+    oa = _C(p["scholar_key"] for p in plan if p["oa_url"])
+    have = _C(p["scholar_key"] for p in plan if p["have_fulltext"])
+    for k in sorted(n):
+        info(f"  {k:4s} {n[k]:3d} planned, {oa[k]:3d} with legal open access, {have[k]:3d} already in corpus/fulltext")
+    info(f"{len(plan)} papers -> {out}")
+    return 0
+
+
 def cmd_annotate(a) -> int:
     from pa_lib.annotate import annotate_many
     from pa_lib.llm import LLMConfig
@@ -253,6 +272,11 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("status", help="corpus coverage table")
     p.add_argument("--annotations", nargs="*", help="annotation dirs to count")
     p.set_defaults(func=cmd_status)
+
+    p = sub.add_parser("plan", help="first-round full-text acquisition plan (held-out first, then coverage)")
+    p.add_argument("--per-scholar", type=int, default=15)
+    p.add_argument("--out", default=str(REPO / "corpus" / "fulltext-plan.csv"))
+    p.set_defaults(func=cmd_plan)
 
     p = sub.add_parser("annotate", help="annotate papers (or --dry-run to render prompts only)")
     p.add_argument("--out", required=True, help="output dir, e.g. corpus/annotations/qwen-run1")

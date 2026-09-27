@@ -280,3 +280,55 @@ def status_table(rows: list[dict[str, str]], annotated: set[str] | None = None) 
         periods = sorted({r["period"] for r in rs if r["period"]}, key=PERIODS.index)
         lines.append(f"| {key} | {len(rs)} | {ver} | {part} | {ft} | {ann} | {tr}/{ho}/{un} | {len(periods)}：{'、'.join(periods)} |")
     return "\n".join(lines)
+
+
+# ----------------------------------------------------------------- full-text acquisition plan
+
+
+def fulltext_plan(rows: list[dict[str, str]], per_scholar: int = 15) -> list[dict[str, str]]:
+    """Pick the first-round papers to obtain in full, per scholar.
+
+    Order: every held-out paper (evaluation needs all of them), then train papers
+    chosen greedily to cover periods and paper types, preferring seed sources
+    (the rules' own origins must be re-read in full), verified metadata and
+    legal open-access copies.  Deterministic; ties broken by paper_id.
+    """
+    plan: list[dict[str, str]] = []
+    by: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for r in rows:
+        by[r["scholar_key"]].append(r)
+    for key in sorted(by):
+        rs = by[key]
+        chosen = [r for r in sorted(rs, key=lambda r: r["paper_id"]) if r.get("split") == "heldout"]
+        pool = [r for r in rs if r.get("split") != "heldout"]
+        periods: Counter = Counter(r["period"] for r in chosen)
+        types: Counter = Counter(r["paper_type"] for r in chosen)
+        while pool and len(chosen) < per_scholar:
+            def score(r):
+                return (
+                    r.get("seed_source") == "1",
+                    periods[r["period"]] == 0,
+                    types[r["paper_type"]] == 0,
+                    r.get("verify_status") in ("verified", "db-export"),
+                    bool(r.get("oa_url")),
+                    r.get("author_role") in ("sole", "first"),
+                    -periods[r["period"]],
+                )
+            best = max(sorted(pool, key=lambda r: r["paper_id"]), key=score)
+            pool.remove(best)
+            chosen.append(best)
+            periods[best["period"]] += 1
+            types[best["paper_type"]] += 1
+        for rank, r in enumerate(chosen, 1):
+            why = []
+            if r.get("split") == "heldout":
+                why.append("留出评测")
+            if r.get("seed_source") == "1":
+                why.append("种子规则来源")
+            if r.get("oa_url"):
+                why.append("有合法开放获取")
+            plan.append({"scholar_key": key, "rank": str(rank), "paper_id": r["paper_id"], "split": r.get("split", ""),
+                         "title": r["title"], "journal": r["journal"], "year": r["year"], "issue": r["issue"],
+                         "paper_type": r["paper_type"], "period": r["period"], "oa_url": r.get("oa_url", ""),
+                         "have_fulltext": "yes" if find_fulltext(r) else "", "why": "；".join(why)})
+    return plan
