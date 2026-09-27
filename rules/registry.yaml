@@ -321,7 +321,7 @@ rules:
     check: 能写出「目标 A 与目标 B 在何处冲突」。
     anti_pattern: 把多个目标并列成一个「综合绩效」。
     requires: ["PZ-GOAL-TENSION"]
-    candidate_sources: []
+    candidate_sources: [HYL-2022-04, HYL-2014-01, HYL-2016-01]
   - id: GT-02
     lens: GT
     layer: archetype
@@ -331,7 +331,9 @@ rules:
     check: 结构变化与回应内容之间有明确对应。
     anti_pattern: 把改革写成领导意志或文件出台的结果。
     requires: ["PZ-SHIFT", "MECH-TRANSLATE|MECH-FEEDBACK|MECH-HISTORICAL"]
-    candidate_sources: []
+    candidate_sources: [HYL-2020-01, HYL-2018-01, HYL-2013-01, HYL-2023-01]
+  # GT-03 在 MVP 中依据的《从自觉到自主》（2025）经多轮检索找不到出处，已从语料删除；
+  # 规则本身作为待检验假设保留，预测来源改为已核验的论文，由全文标注决定去留。
   - id: GT-03
     lens: GT
     layer: archetype
@@ -341,7 +343,7 @@ rules:
     check: 新范畴能解释现成范畴解释不了的至少一类现象。
     anti_pattern: 把政策口号直接当作学术概念。
     requires: ["CON-INDIGENOUS|CON-RECONSTRUCT"]
-    candidate_sources: []
+    candidate_sources: [HYL-2022-01, HYL-2012-01, HYL-2012-02, HYL-2011-01]
   - id: GT-04
     lens: GT
     layer: archetype
@@ -351,7 +353,7 @@ rules:
     check: 角色与可测行为之间的对应关系清楚。
     anti_pattern: 从文件表述推断政府的真实优先次序。
     requires: ["PZ-GOAL-TENSION|MECH-INCENTIVE", "EVI-PANEL|EVI-DOCUMENT"]
-    candidate_sources: []
+    candidate_sources: [HYL-2014-01]
 
   # ================================================================ PP 政策过程
   - id: PP-01
