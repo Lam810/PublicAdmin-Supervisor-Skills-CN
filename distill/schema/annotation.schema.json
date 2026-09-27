@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/Lam810/PublicAdmin-Supervisor-Skills-CN/distill/schema/annotation.schema.json",
-  "title": "PA paper research-move annotation (codebook 0.2.x)",
+  "title": "PA paper research-move annotation (codebook 0.2.x / 0.3.x)",
   "description": "One annotation per paper. Every field marked present and every move must carry verbatim evidence quotes with a paragraph locator such as P12 or P12-P13.",
   "type": "object",
   "required": ["paper_id", "codebook_version", "paper_type", "fields", "moves"],
   "additionalProperties": false,
   "properties": {
     "paper_id": {"type": "string", "minLength": 1},
-    "codebook_version": {"type": "string", "pattern": "^0\\.2\\."},
+    "codebook_version": {"type": "string", "pattern": "^0\\.[23]\\."},
     "paper_type": {
       "enum": ["mechanism", "concept", "policy-process", "reform", "applicability", "normative", "review", "mixed"]
     },

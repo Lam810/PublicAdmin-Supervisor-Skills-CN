@@ -73,6 +73,14 @@ class RepoTests(unittest.TestCase):
         names = {s for lens in reg["lenses"] for s in lens["tradition"]["scholars"]}
         self.assertFalse([n for n in names if n in cards])
         self.assertTrue(all(n in preview for n in names))
+        # consumer lenses (e.g. writing architecture) follow the same rule in every consuming skill
+        for lens in [l for l in reg["lenses"] if l.get("consumers")]:
+            for skill in lens["consumers"]:
+                card = (ROOT / "skills" / skill / "references" / f"{lens['card']}.md").read_text(encoding="utf-8")
+                self.assertFalse([n for n in names if n in card], skill)
+                for rule in [r for r in reg["rules"] if r["lens"] == lens["id"]]:
+                    token = f"**{rule['id']}**"
+                    (self.assertIn if rule["status"] in runtime else self.assertNotIn)(token, card)
 
     @unittest.skipUnless(shutil.which("bash"), "bash not available")
     def test_installer_copies_every_skill(self):

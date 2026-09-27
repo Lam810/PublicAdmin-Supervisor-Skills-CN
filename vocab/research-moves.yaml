@@ -11,7 +11,7 @@
 #   - 编码本随标注迭代修订：改动定义要升 version，并在每条标注里记录 codebook_version；
 #   - example 一律是虚构教学示例，不对应任何真实论文。
 
-version: "0.2.0"
+version: "0.3.0"
 
 families:
   PZ:
@@ -35,6 +35,9 @@ families:
   NRM:
     label: 规范/改革动作
     question: 论文如何处理「应该」与「能够」之间的关系？
+  WRT:
+    label: 写作架构动作
+    question: 论文的各个部分怎样依次回答读者的问题？研究设计为什么这样写？
 
 moves:
   # ---------------------------------------------------------------- PZ
@@ -526,3 +529,104 @@ moves:
     include: 每条对策都能回指一个机制环节。
     exclude: 与分析脱节的通用对策清单。
     example: （虚构）针对「监督虚化」环节提出可核查的抽检设计。
+
+  # ---------------------------------------------------------------- WRT（v0.3 新增：文本组织动作，区别于 EVI/CTR 的研究动作本身）
+  - code: WRT-SMALL-BIG
+    family: WRT
+    label: 小切口·大问题
+    definition: 以一个具体、带有冲突或张力的个案（小切口）承载一个中观理论层面的问题（大问题），并在问题提出处说明二者的关系。
+    include: 文中明确说明为何这个案例能让某个一般问题以尖锐的形式出现。
+    exclude: 只交代案例背景，或把案例写成政策演变历程而没有指出它承载的问题。
+    example: （虚构）以一个街道的考核冲突，讨论多重问责并存时基层如何排序。
+  - code: WRT-TITLE-SPLIT
+    family: WRT
+    label: 标题分工
+    definition: 主标题承载问题、概念或命题，副标题交代案例、材料或处理方式。
+    include: 标题由主副两部分构成，且分工清楚。
+    exclude: 主副标题只是同义重复，或主标题只写研究对象。
+    example: （虚构）「减负为何增负——基于某区考核台账的案例研究」。
+  - code: WRT-TOPIC-TO-Q
+    family: WRT
+    label: 题目转成问题
+    definition: 把一个研究领域或政策话题转写成可回答的探索性、描述性或解释性问题。
+    include: 标题或引言中出现明确的「什么」「如何」「为什么」式问题。
+    exclude: 只有「X 研究」「论 X」式的话题。
+    example: （虚构）从「数字政府研究」改为「数字平台为何没有减少基层填报？」。
+  - code: WRT-INTRO-DIRECT
+    family: WRT
+    label: 引言开门见山
+    definition: 引言在开头几段内提出研究问题，并预告主要发现与贡献。
+    include: 引言前部即出现问题句，且引言中有对发现或贡献的预告。
+    exclude: 大段政策背景之后才出现问题，或引言不预告发现。
+    example: （虚构）第二段即提出问题，第四段概括发现与三点贡献。
+  - code: WRT-LIT-CRITICAL
+    family: WRT
+    label: 批判性综述
+    definition: 文献评估按解释路径组织，兼顾经典与前沿，落点是指出既有解释的不足并导向本文问题。
+    include: 综述部分对既有解释作出评价并据此引出本文问题。
+    exclude: 按作者或年代逐条罗列摘要。
+    example: （虚构）比较三类解释后指出它们共同忽略的条件。
+  - code: WRT-FRAMEWORK-ARGUED
+    family: WRT
+    label: 框架有图有论证
+    definition: 分析框架既有图示，也对图中每一个关系给出论证。
+    include: 框架图中的箭头在正文中逐一得到解释。
+    exclude: 只有方框图而没有对关系的论证，或只有文字而关系不清。
+    example: （虚构）框架图的三条箭头分别在三个小节中论证。
+  - code: WRT-METHOD-JUSTIFIED
+    family: WRT
+    label: 方法有理有据
+    definition: 数据与方法部分交代材料来源、选择理由与处理过程，而不只是列出数据。
+    include: 说明为何选择这些材料或方法，以及它们能回答什么。
+    exclude: 只写「本文采用案例研究法」「数据来自统计年鉴」。
+    example: （虚构）说明为何选择两个条件相近而结果不同的区。
+  - code: WRT-THREATS-NAMED
+    family: WRT
+    label: 点名识别威胁
+    definition: 明确写出样本选择、反向因果、遗漏变量等识别威胁，并说明设计如何逐一回应，而不依赖事后补救。
+    include: 文中逐一点名威胁并给出对应的设计或检验。
+    exclude: 只说「为保证结果稳健，进行了稳健性检验」。
+    example: （虚构）说明试点地区并非随机选定，并用试点前趋势与替代样本回应。
+  - code: WRT-PLACEBO
+    family: WRT
+    label: 证伪式对照
+    definition: 在理论预期不应出现效应的情境或群体中检验，以支撑因果路径或排他性论证。
+    include: 文中给出「在不该有效应的地方确实没有效应」的检验。
+    exclude: 一般的稳健性检验（换指标、换样本）。
+    example: （虚构）检验某机制在没有过程考核的地区是否同样出现。
+  - code: WRT-RIVAL-APPROACHES
+    family: WRT
+    label: 设计定位
+    definition: 把领域中相互竞争的研究路径或设计摆出来，说明本文设计为何能弥补它们的缺陷。
+    include: 文中比较至少两种研究路径的优缺点，并据此论证本文设计。
+    exclude: 只介绍本文方法而不与其他路径比较。
+    example: （虚构）说明观察性相关难以识别、实验又远离大问题，本文的历史设计介于二者之间。
+  - code: WRT-FIELD-GAP
+    family: WRT
+    label: 田野落差建构理论
+    definition: 把田野观察与既有理论假定之间的落差作为理论洞见的来源，并写明这一落差。
+    include: 文中说明既有假定预期什么、田野中看到什么、落差引出什么新的分析角度。
+    exclude: 田野材料只用来印证既有理论。
+    example: （虚构）既有研究只看政府内部层级，田野中发现社会力量参与了博弈。
+  - code: WRT-RESULTS-DIALOGUE
+    family: WRT
+    label: 结果与理论对话
+    definition: 结果部分回扣前文的假设或框架，说明结果支持、修正或否定了哪一部分，前后呼应。
+    include: 结果部分明确回指假设或框架。
+    exclude: 只复述表格或叙述案例经过。
+    example: （虚构）逐条说明三项假设的检验结果及其含义。
+  - code: WRT-DISCUSS-LIMITS
+    family: WRT
+    label: 讨论含贡献与局限
+    definition: 讨论部分同时交代理论贡献、实践启示、研究不足与后续议题。
+    include: 讨论或结论中四类内容至少出现三类，其中必须有不足或局限。
+    exclude: 只写贡献与建议，不写局限。
+    example: （虚构）讨论部分列出两点贡献、一点启示、两点局限与后续议题。
+  - code: WRT-OPEN-ENDING
+    family: WRT
+    label: 开放式收尾
+    definition: 结尾回到文献对话或实践对比，并提出一个本文未能回答、值得后续研究的问题。
+    include: 结尾明确提出后续问题，且它由本文发现引出。
+    exclude: 以政策口号或泛泛的「有待进一步研究」收尾。
+    example: （虚构）结尾追问：当过程考核撤销后，已形成的留痕惯例是否会消退？
+

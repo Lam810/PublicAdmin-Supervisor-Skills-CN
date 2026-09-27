@@ -341,7 +341,8 @@ class DryRunTests(unittest.TestCase):
             self.assertIn("`MECH-TENSION`", prompt)
             self.assertIn("DEMO-2024-01", prompt)
             self.assertFalse(prompt.lstrip().startswith("<!--"))
-            self.assertEqual(sum(1 for m in load_moves()["moves"] if f"`{m['code']}`" in prompt), 68)
+            moves = load_moves()["moves"]
+            self.assertEqual(sum(1 for m in moves if f"`{m['code']}`" in prompt), len(moves))
 
 
 class BlindTests(unittest.TestCase):

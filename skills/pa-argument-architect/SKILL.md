@@ -7,6 +7,7 @@ license: CC-BY-NC-SA-4.0
 # 因果与嵌套论证架构
 
 先读 [四层论证与因果检查](references/nested-argument.md)，需示范时读 [虚构拆解示例](references/worked-example.md)。
+研究设计部分如何写出识别威胁、对照检验与设计定位，参见 [写作架构卡](references/writing-architecture.md)。
 
 同时搭建两条不同的链：
 - 世界中的因果链：条件怎样改变行动者选择、互动及结果。

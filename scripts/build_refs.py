@@ -98,7 +98,7 @@ def render_codebook() -> str:
     return "\n".join(out) + "\n"
 
 
-def _lens_cards(statuses: list[str], preview: bool) -> str:
+def _lens_cards(statuses: list[str], preview: bool, only: list[str] | None = None, title: str = "研究镜头卡") -> str:
     reg = load_registry(REGISTRY)
     support = {}
     if SUPPORT.exists():
@@ -112,12 +112,17 @@ def _lens_cards(statuses: list[str], preview: bool) -> str:
                "Skill 只加载 `rules/registry.yaml` 中 `build.runtime_statuses` 指定状态的规则。", "",
                "来源传统一栏只说明规则从哪个公开研究传统中抽象而来，不代表相关学者认可，也不是对其观点的概括。", ""]
     else:
-        out = [_gen_header("rules/registry.yaml").rstrip("\n"), "# 研究镜头卡", "",
+        out = [_gen_header("rules/registry.yaml").rstrip("\n"), f"# {title}", "",
                "镜头只是研究动作的抽象，不代表任何学者的观点，不得用来扮演具体学者。", "",
                f"本文件只加载状态为 {shown} 的规则；镜头的「关注」「追问」「输出」「常见失败」是启发式检查，不是经过验证的规则。"
                "尚在验证中的规则不在此处出现。", ""]
-    out += [f"规则状态：{legend}", "", "## 目录", ""]
-    lenses = [l for l in reg["lenses"] if l["id"] == "SH"] + [l for l in reg["lenses"] if l.get("panel")]
+    out += [f"规则状态：{legend}。", "", "## 目录", ""]
+    if only:
+        lenses = [l for l in reg["lenses"] if l["id"] in only]
+    else:
+        lenses = [l for l in reg["lenses"] if l["id"] == "SH"] + [l for l in reg["lenses"] if l.get("panel")]
+        if preview:
+            lenses += [l for l in reg["lenses"] if l["id"] != "SH" and not l.get("panel")]
     out += [f"- {l['id']} {l['name']}" for l in lenses]
     for lens in lenses:
         out += ["", f"## {lens['id']} {lens['name']}", ""]
@@ -155,6 +160,23 @@ def render_lens_preview() -> str:
     return _lens_cards(list(reg.get("build", {}).get("preview_statuses", ["seed", "candidate", "validated"])), preview=True)
 
 
+def _consumer_card(lens_id: str) -> str:
+    reg = load_registry(REGISTRY)
+    lens = next(l for l in reg["lenses"] if l["id"] == lens_id)
+    return _lens_cards(list(reg.get("build", {}).get("runtime_statuses", ["validated"])), preview=False,
+                       only=[lens_id], title=lens["name"])
+
+
+def consumer_cards() -> dict[str, object]:
+    """Lenses with `consumers` and `card` are rendered into each consuming skill."""
+    reg = load_registry(REGISTRY)
+    out: dict[str, object] = {}
+    for lens in reg["lenses"]:
+        for skill in lens.get("consumers") or []:
+            out[f"{skill}/references/{lens['card']}.md"] = (lambda lid=lens["id"]: _consumer_card(lid))
+    return out
+
+
 GENERATED = {
     "pa-paper-reviewer/references/defect-codes.md": render_defects,
     "pa-supervisor-panel/references/defect-codes.md": render_defects,
@@ -176,7 +198,7 @@ def expected_files() -> dict[Path, str]:
                         f"Edit here, then run scripts/build_refs.py --write. -->\n" + body)
         for c in copies:
             files[SKILLS / c] = f"<!-- COPY of skills/{canonical}; edit the canonical file and run scripts/build_refs.py --write. -->\n" + body
-    for rel, fn in GENERATED.items():
+    for rel, fn in {**GENERATED, **consumer_cards()}.items():
         files[SKILLS / rel] = fn()
     files[REPO / "rules" / "preview" / "lens-cards-preview.md"] = render_lens_preview()
     return files

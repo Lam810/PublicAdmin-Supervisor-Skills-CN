@@ -24,6 +24,8 @@
 - 郁建兴：治理理论、国家—社会关系、社会治理、精准治理、数字治理；
 - 丁煌：政策执行、利益分析与执行阻滞、博弈模型、行政学说史。
 
+写作架构镜头另有两组来源（马亮、马啸：论文写作与发表、研究设计写法），见 `handbook/03-writing-architecture.md` 与 `corpus/writing-sources.md`。
+
 ## 2. Per-paper annotation schema
 
 每篇论文只提炼以下字段，不做泛泛摘要：

@@ -7,6 +7,7 @@ license: CC-BY-NC-SA-4.0
 # 行政管理论文体裁架构
 
 读 [体裁骨架](references/genre-blueprints.md)。
+逐节检查承接时读 [写作架构卡](references/writing-architecture.md)：其中的追问是启发式检查，只有已验证的规则才会列在卡中。
 需要因果与层层嵌套时读 [嵌套论证](references/nested-argument.md)；本地已安装 pa-argument-architect 时可使用其深入工作流，未安装不影响本技能使用。
 
 把“八股”理解为读者反复需要被回答的问题，不是固定六个标题或漂亮句式。

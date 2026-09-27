@@ -24,6 +24,8 @@ VARIANTS = ("baseline", "rules", "rules_named")
 def render_rules_block(registry: dict[str, Any], named: bool) -> str:
     lines = ["# 可参考的研究动作规则", "", "以下规则抽象自公共管理研究传统，只描述研究动作，不代表任何学者的观点。", ""]
     for lens in registry["lenses"]:
+        if not (lens.get("panel") or lens["id"] == "SH"):
+            continue  # Task A predicts research moves; consumer lenses such as writing architecture are tested by Task B
         rules = [r for r in registry["rules"] if r["lens"] == lens["id"] and r["status"] != "rejected"]
         if not rules:
             continue

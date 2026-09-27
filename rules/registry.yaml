@@ -18,7 +18,7 @@
 #   2026-09-27 在任何全文标注之前按题名登记（只用训练集论文）；共享规则 SH 预期普遍出现，不单列。
 #   aggregate 会报告预测命中率，用于评估「按题名形成种子规则」本身的准确度。
 
-version: "0.2.0"
+version: "0.3.0"
 
 statuses:
   seed: 由代表作摘要、目录与公开信息形成的假设；尚未完成全文标注与 ≥3 篇交叉验证。
@@ -163,6 +163,26 @@ lenses:
       - 对策是否逐条对应阻滞机制的作用环节？
     output: 一张「利益—策略—阻滞机制—制度杠杆」对照表。
     typical_failure: 把执行偏差归咎于执行者素质或「认识不到位」，对策与分析脱节。
+
+  - id: WA
+    name: 写作架构镜头
+    panel: false
+    consumers: [pa-paper-architect, pa-argument-architect]
+    card: writing-architecture   # 渲染为 consumers 各自的 references/writing-architecture.md
+    tradition:
+      keys: [MAL, MAX]
+      scholars: [马亮, 马啸]
+      note: 公共管理实证论文的写作与发表（学术「八股文」、「小切口·大问题」、选题与综述）；研究设计与因果识别的写法、从田野建构理论。来源清单见 corpus/writing-sources.md。
+    focus: 论文各部分怎样依次回答读者的问题，以及研究设计为什么这样写。
+    questions:
+      - 题目是否由主标题承载问题、副标题交代案例与处理方式？案例是否真有冲突与张力？
+      - 引言是否开门见山提出问题，并预告发现与贡献？
+      - 文献评估是在批判还是在罗列？缺口是否导向本文的问题？
+      - 每一部分回答了哪个问题，又为下一部分提供了什么前提？
+      - 识别威胁是否被点名并逐一回应，而不是靠滞后项、堆控制变量等事后补救？有没有在不该有效应的地方做对照？
+      - 结果是否回扣理论？讨论是否交代贡献、启示、局限与后续议题？
+    output: 一张「部分—回答的问题—依赖的前提—交给下一部分的结论」对照表，以及最需要补强的一处承接。
+    typical_failure: 把八股当成固定标题模板；或结构齐全，但各部分之间没有论证承接。
 
 rules:
   # ================================================================ SH 共享核心
@@ -562,3 +582,115 @@ rules:
     anti_pattern: 只摘取理论的结论性表述。
     requires: ["CON-GENEALOGY"]
     candidate_sources: [DH-2003-02, DH-2003-01, DH-2023-01]
+
+  # ================================================================ WA 写作架构（v0.3 新增）
+  - id: WA-01
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 论文以单个案例或具体现象为材料。
+    action: 在问题提出处讲清小切口与大问题的关系：小切口要有冲突与张力，大问题落在中观理论层。
+    check: 能写出「这个案例值得研究，是因为它让某个一般问题以尖锐的形式出现」。
+    anti_pattern: 把案例写成某项政策的演变历程。
+    requires: ["WRT-SMALL-BIG"]
+    candidate_sources: [MAL-2019-03, MAL-2015-01, MAL-2019-02]
+  - id: WA-02
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 拟定或修改题目。
+    action: 主标题承载问题、概念或命题，副标题交代案例、材料或处理方式。
+    check: 遮住副标题后，主标题仍然是一个问题或主张。
+    anti_pattern: 主标题只写研究对象，或主副标题同义重复。
+    requires: ["WRT-TITLE-SPLIT"]
+    candidate_sources: [MAL-2019-03, MAL-2019-02, MAL-2021-01, MAL-2013-02, MAX-2022-02]
+  - id: WA-03
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 撰写引言。
+    action: 在开头几段内提出研究问题，并预告主要发现与贡献。
+    check: 只读引言前三段就能说出本文的问题。
+    anti_pattern: 大段政策背景之后才出现问题，或引言不预告发现。
+    requires: ["WRT-INTRO-DIRECT", "field:research_question"]
+    candidate_sources: [MAL-2013-02, MAL-2016-02, MAL-2016-01, MAL-2021-01]
+  - id: WA-04
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 撰写文献评估。
+    action: 按解释路径组织文献，兼顾经典与前沿，落点是指出既有解释的不足并导向本文问题。
+    check: 综述最后一段能自然引出本文的问题。
+    anti_pattern: 按作者或年代罗列摘要。
+    requires: ["WRT-LIT-CRITICAL", "GAP-*"]
+    candidate_sources: [MAL-2009-02, MAL-2014-02, MAL-2017-02, MAL-2009-01]
+  - id: WA-05
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 撰写数据与方法部分。
+    action: 交代材料来源、选择理由与处理过程，并说明这些材料能回答什么、不能回答什么。
+    check: 读者能据此判断材料为何能区分本文的解释与竞争解释。
+    anti_pattern: 只写「本文采用案例研究法」「数据来自统计年鉴」。
+    requires: ["WRT-METHOD-JUSTIFIED"]
+    candidate_sources: [MAL-2016-02, MAL-2013-02, MAL-2015-01]
+  - id: WA-06
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 撰写结果部分。
+    action: 逐条回扣前文的假设或框架，说明结果支持、修正或否定了哪一部分，做到前后呼应。
+    check: 每一项主要结果都能回指一个假设或框架环节。
+    anti_pattern: 复述表格或按时间叙述案例经过。
+    requires: ["WRT-RESULTS-DIALOGUE"]
+    candidate_sources: [MAL-2013-02, MAL-2016-02, MAL-2016-01]
+  - id: WA-07
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 撰写讨论与结论。
+    action: 同时交代理论贡献、实践启示、研究不足与后续议题，局限不能省略。
+    check: 讨论中至少有一条具体的局限及其对结论范围的影响。
+    anti_pattern: 只写贡献与建议，不写局限。
+    requires: ["WRT-DISCUSS-LIMITS", "field:boundary_conditions"]
+    candidate_sources: [MAL-2016-01, MAL-2016-02, MAL-2015-03, MAL-2021-01]
+  - id: WA-08
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 论文用观察性材料作因果主张。
+    action: 明确点名样本选择、反向因果、遗漏变量等识别威胁，并说明设计如何逐一回应；不把滞后项、堆控制变量当作解决办法。
+    check: 每一种被点名的威胁都有对应的设计或检验。
+    anti_pattern: 只写「为保证结果稳健，进行了稳健性检验」。
+    requires: ["WRT-THREATS-NAMED"]
+    candidate_sources: [MAX-2018-01, MAL-2013-02, MAL-2016-02]
+  - id: WA-09
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 论文依赖一条因果路径或排他性假定。
+    action: 在理论预期不应出现效应的情境或群体中做对照检验，用「该无效应处确实无效应」支撑路径论证。
+    check: 至少有一项对照检验的预期结果是「无效应」。
+    anti_pattern: 只做换指标、换样本的一般稳健性检验。
+    requires: ["WRT-PLACEBO"]
+    candidate_sources: [MAX-2018-01]
+  - id: WA-10
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 论证研究设计的选择。
+    action: 把领域中相互竞争的研究路径摆出来，说明各自缺陷，再说明本文设计为何能弥补；结尾承认本设计的局限。
+    check: 设计部分至少比较了两种路径，并写出本设计的局限。
+    anti_pattern: 只介绍本文方法，不与其他路径比较。
+    requires: ["WRT-RIVAL-APPROACHES"]
+    candidate_sources: [MAX-2018-01, MAL-2015-02, MAL-2017-01]
+  - id: WA-11
+    lens: WA
+    layer: archetype
+    status: seed
+    trigger: 论文有田野材料并试图提出新的理论角度。
+    action: 写明既有理论假定预期什么、田野中看到什么，以及这一落差引出的新分析角度。
+    check: 能写出「假定—观察—落差—新角度」四步。
+    anti_pattern: 田野材料只用来印证既有理论。
+    requires: ["WRT-FIELD-GAP"]
+    candidate_sources: [MAX-2022-02, MAX-2021-01]
